@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "ymtbzyj5IA+x9pccFuTDYZI+/Q+ynrTYoG7PfV8wY0n7Mn4OfCDYVk2XvEY1Cti67O3nP/AMXfijsLE1foWgfg==",
+  "success": true,
+  "projectFilePath": "E:\\In66.Web\\src\\In66.Web\\In66.Web.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.0\\microsoft.visualstudio.azure.containers.tools.targets.1.17.0.nupkg.sha512"
+  ],
+  "logs": []
+}
