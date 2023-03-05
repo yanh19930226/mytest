@@ -43,7 +43,8 @@ pipeline {
              type: 'PT_BRANCH_TAG',
              description: '选择git分支'
              )
-
+       string( name :'port',defaultValue:'beauty',description:'服务port')
+       string( name :'containerport',defaultValue:'beauty',description:'容器port')
        choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
     }
 
@@ -162,15 +163,31 @@ pipeline {
                                   echo "${branch}部署完成"
                             }
                             break;
-                        case 'master':
+                        case 'main':
                             println("开始部署${branch}分支")
                             for (deployip in DEPLOY_Master_THOST){
 
-                                   echo "服务器Ip:${deployip}"
+                                    echo "服务器Ip:${deployip}"
 
-                                   sshPublisher(publishers: [sshPublisherDesc(configName: deployip, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/jenkins_shell/test.sh", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                                    sshPublisher(
+                                          publishers: [sshPublisherDesc(
+                                              configName: deployip, 
+                                              transfers: [sshTransfer(cleanRemote: false,
+                                              excludes: '',
+                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $imageName $tagImageName $port $containerport", 
+                                              execTimeout: 120000,
+                                              flatten: false, makeEmptyDirs: false, 
+                                              noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                              remoteDirectory: '',
+                                              remoteDirectorySDF: false,
+                                              removePrefix: '', 
+                                              sourceFiles: '')], 
+                                              usePromotionTimestamp: false, 
+                                              useWorkspaceInPromotion: false,
+                                              verbose: false)]
+                                           )
 
-                                   echo "${branch}部署完成"
+                                    echo "${branch}部署完成"
                             }
                             break;
                         default:
