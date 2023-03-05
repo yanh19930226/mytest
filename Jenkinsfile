@@ -132,7 +132,7 @@ pipeline {
 
                     sh "docker rmi -f ${tagImageName}"
 
-                    sh "docker rmi $(docker images -q -f dangling=true)"
+                    // sh "docker rmi $(docker images -q -f dangling=true)"
 
                     echo "删除本地镜像成功"
                 }
