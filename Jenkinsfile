@@ -169,25 +169,25 @@ pipeline {
 
                                     echo "服务器Ip:${deployip}"
                                     
-                                    sshPublisher(publishers: [sshPublisherDesc(configName: deployip, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/jenkins_shell/test.sh", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                                    // sshPublisher(publishers: [sshPublisherDesc(configName: deployip, transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/jenkins_shell/test.sh", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 
-                                    // sshPublisher(
-                                    //       publishers: [sshPublisherDesc(
-                                    //           configName: deployip, 
-                                    //           transfers: [sshTransfer(cleanRemote: false,
-                                    //           excludes: '',
-                                    //           execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $imageName $tagImageName $port $containerport", 
-                                    //           execTimeout: 120000,
-                                    //           flatten: false, makeEmptyDirs: false, 
-                                    //           noDefaultExcludes: false, patternSeparator: '[, ]+',
-                                    //           remoteDirectory: '',
-                                    //           remoteDirectorySDF: false,
-                                    //           removePrefix: '', 
-                                    //           sourceFiles: '')], 
-                                    //           usePromotionTimestamp: false, 
-                                    //           useWorkspaceInPromotion: false,
-                                    //           verbose: false)]
-                                    //        )
+                                    sshPublisher(
+                                          publishers: [sshPublisherDesc(
+                                              configName: deployip, 
+                                              transfers: [sshTransfer(cleanRemote: false,
+                                              excludes: '',
+                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $imageName $tagImageName $port $containerport", 
+                                              execTimeout: 120000,
+                                              flatten: false, makeEmptyDirs: false, 
+                                              noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                              remoteDirectory: '',
+                                              remoteDirectorySDF: false,
+                                              removePrefix: '', 
+                                              sourceFiles: '')], 
+                                              usePromotionTimestamp: false, 
+                                              useWorkspaceInPromotion: false,
+                                              verbose: false)]
+                                           )
 
                                     echo "${branch}部署完成"
                             }
