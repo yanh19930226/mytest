@@ -132,7 +132,7 @@ pipeline {
 
                     sh "docker rmi -f ${tagImageName}"
 
-                    // sh "docker rmi $(docker images -q -f dangling=true)"
+                    sh "docker rmi `docker images|grep none| awk '{print $3}'`"
 
                     echo "删除本地镜像成功"
                 }
@@ -275,7 +275,7 @@ pipeline {
                                               configName: deployip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
-                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
                                               execTimeout: 120000,
                                               flatten: false, makeEmptyDirs: false, 
                                               noDefaultExcludes: false, patternSeparator: '[, ]+',
@@ -299,7 +299,7 @@ pipeline {
                                               configName: deployip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
-                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
                                               execTimeout: 120000,
                                               flatten: false, makeEmptyDirs: false, 
                                               noDefaultExcludes: false, patternSeparator: '[, ]+',
@@ -324,7 +324,7 @@ pipeline {
                                               configName: deployip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
-                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
                                               execTimeout: 120000,
                                               flatten: false, makeEmptyDirs: false, 
                                               noDefaultExcludes: false, patternSeparator: '[, ]+',
@@ -350,7 +350,7 @@ pipeline {
                                               configName: deployip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
-                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
                                               execTimeout: 120000,
                                               flatten: false, makeEmptyDirs: false, 
                                               noDefaultExcludes: false, patternSeparator: '[, ]+',
