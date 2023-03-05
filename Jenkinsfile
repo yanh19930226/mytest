@@ -97,8 +97,7 @@ pipeline {
                
                 script{
 
-                   //获取git当前head简短
-                   //build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+                   //mian
              
                    sh "docker build -t  ${imageName} ."
                
@@ -270,7 +269,7 @@ pipeline {
 
                                  sshPublisher(
                                           publishers: [sshPublisherDesc(
-                                              configName: deployip, 
+                                              configName: rollbackip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
                                               execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
@@ -294,7 +293,7 @@ pipeline {
                             for (rollbackip in DEPLOY_TEST_THOST){
                                 sshPublisher(
                                           publishers: [sshPublisherDesc(
-                                              configName: deployip, 
+                                              configName: rollbackip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
                                               execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
@@ -319,7 +318,7 @@ pipeline {
                             for (rollbackip in DEPLOY_Master_THOST){
                                 sshPublisher(
                                           publishers: [sshPublisherDesc(
-                                              configName: deployip, 
+                                              configName: rollbackip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
                                               execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
@@ -345,7 +344,7 @@ pipeline {
 
                                 sshPublisher(
                                           publishers: [sshPublisherDesc(
-                                              configName: deployip, 
+                                              configName: rollbackip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
                                               execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
