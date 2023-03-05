@@ -132,7 +132,7 @@ pipeline {
 
                     sh "docker rmi -f ${tagImageName}"
 
-                    sh "docker rmi `docker images|grep none| awk '{print $3}'`"
+                    // sh "docker rmi docker images|grep none| awk '{print $3}'"
 
                     echo "删除本地镜像成功"
                 }
