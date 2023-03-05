@@ -1,11 +1,11 @@
 //开发环境
-def DEPLOY_DEV_HOST = [ '39.101.1.156']
+def DEPLOY_DEV_HOST = [ '116.62.214.239']
 //测试环境
-def DEPLOY_TEST_THOST = [ '39.101.1.156']
+def DEPLOY_TEST_THOST = [ '116.62.214.239']
 //Master环境
-def DEPLOY_Master_THOST = [ '39.101.1.156']
+def DEPLOY_Master_THOST = [ '116.62.214.239']
 //生产环境
-def DEPLOY_PRO_THOST = [ '39.101.1.156']
+def DEPLOY_PRO_THOST = [ '116.62.214.239']
 
 pipeline {
     
@@ -38,7 +38,7 @@ pipeline {
        gitParameter(
              branch: '',
              branchFilter: 'origin.*/(.*)',
-             defaultValue: 'master', // default value 必填
+             defaultValue: 'main', // default value 必填
              name: 'branch',
              type: 'PT_BRANCH_TAG',
              description: '选择git分支'
@@ -119,19 +119,21 @@ pipeline {
                
                 withCredentials([usernamePassword(credentialsId: "${haror_auth}", passwordVariable: 'password', usernameVariable: 'username')]) {
 
-                     echo "push image"
+                    echo "push image"
                     
-                     sh "docker login -u ${username}  -p ${password} ${harbor_url}"
+                    sh "docker login -u ${username}  -p ${password} ${harbor_url}"
                    
-                     sh "docker push ${tagImageName}"
+                    sh "docker push ${tagImageName}"
 
-                     echo "镜像上传成功"
+                    echo "镜像上传成功"
 
-                     sh "docker rmi -f ${imageName}"
+                    sh "docker rmi -f ${imageName}"
 
-                     sh "docker rmi -f ${tagImageName}"
+                    sh "docker rmi -f ${tagImageName}"
 
-                     echo "删除本地镜像成功"
+                    sh "docker rmi $(docker images -q -f dangling=true)"
+
+                    echo "删除本地镜像成功"
                 }
             }
         }
@@ -182,7 +184,7 @@ pipeline {
                                             configName: deployip, 
                                             transfers: [sshTransfer(cleanRemote: false,
                                             excludes: '',
-                                            execCommand: "/opt/jenkins_shell/test.sh", 
+                                            execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $imageName $tagImageName $port $containerport", 
                                             execTimeout: 120000,
                                             flatten: false, makeEmptyDirs: false, 
                                             noDefaultExcludes: false, patternSeparator: '[, ]+',
