@@ -43,7 +43,8 @@ pipeline {
              type: 'PT_BRANCH_TAG',
              description: '选择git分支'
              )
-
+       string( name :'port',defaultValue:'beauty',description:'服务port')
+       string( name :'containerport',defaultValue:'beauty',description:'容器port')
        choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
     }
 
