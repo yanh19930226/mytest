@@ -104,11 +104,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\In66.Web\\src\\In66.Web\\In66.Web.csproj",
+      "projectUniqueName": "E:\\In66.Web\\mytest\\src\\In66.Web\\In66.Web.csproj",
       "projectName": "In66.Web",
-      "projectPath": "E:\\In66.Web\\src\\In66.Web\\In66.Web.csproj",
+      "projectPath": "E:\\In66.Web\\mytest\\src\\In66.Web\\In66.Web.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "E:\\In66.Web\\src\\In66.Web\\obj\\",
+      "outputPath": "E:\\In66.Web\\mytest\\src\\In66.Web\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
