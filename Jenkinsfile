@@ -96,10 +96,7 @@ pipeline {
             steps {  
                
                 script{
-
-                   //获取git当前head简短
-                   //build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-             
+                  
                    sh "docker build -t  ${imageName} ."
                
                    sh "docker tag ${imageName} ${tagImageName}"
