@@ -162,7 +162,7 @@ pipeline {
         }
         stage('k8syml文件部署') {
             steps {
-                sh 'ssh root@139.198.191.106 kubectl apply -f /usr/local/k8s/pipeline.yml'
+                sh 'ssh root@39.101.1.156 kubectl apply -f /usr/local/k8s/pipeline.yml'
             }
         }
        
