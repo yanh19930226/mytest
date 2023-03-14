@@ -17,7 +17,7 @@ spec:
         app: pipeline
     spec:
       containers:
-        - image: 39.101.1.156:89/mytest/mytest:dev
+        - image: 39.101.1.156:89/mytest/mytest:k8s
           imagePullPolicy: Always
           name: pipeline
           ports:
