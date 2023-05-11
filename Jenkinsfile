@@ -387,6 +387,14 @@ pipeline {
     }
 
      post {
+        aborted {
+            //当此Pipeline 终止时打印消息
+            echo 'aborted'  
+        }
+        changed {
+            //当pipeline的状态与上一次build状态不同时打印消息
+            echo 'changed'          
+        }    
         unstable {
            dingtalk (
                 robot: 'jenkins',
@@ -396,7 +404,7 @@ pipeline {
                     "### [${env.JOB_NAME}](${env.JOB_URL}) ",
                     '---',
                     "- 任务：[${currentBuild.displayName}](${env.BUILD_URL})",
-                    '- 状态：<font color=#005EFF >不稳定</font>',
+                    '- 状态：<font color=#545454 >不稳定</font>',
                     "- 持续时间：${currentBuild.durationString}",
                     "- 执行人：${currentBuild.buildCauses.shortDescription}",
                   ]
