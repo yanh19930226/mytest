@@ -56,8 +56,6 @@ pipeline {
             }           
             steps { 
 
-                // git branch: "${branch}", credentialsId: 'jenkins', url: "${git_url}"
-
                 checkout([$class: 'GitSCM', 
                    branches: [[name: '${branch}']],
                    extensions: [], 
@@ -180,8 +178,8 @@ pipeline {
                                               configName: deployip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
-                                            //   execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
-                                              execCommand: "echo 'aaa'> /opt/test.txt", 
+                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                            //   execCommand: "echo 'aaa'> /opt/test.txt", 
                                               execTimeout: 120000,
                                               flatten: false, makeEmptyDirs: false, 
                                               noDefaultExcludes: false, patternSeparator: '[, ]+',
