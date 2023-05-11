@@ -1,11 +1,11 @@
 //开发环境
-def DEPLOY_DEV_HOST = [ '39.101.1.156']
+def DEPLOY_DEV_HOST = [ '139.198.171.190']
 //测试环境
-def DEPLOY_TEST_THOST = [ '39.101.1.156']
+def DEPLOY_TEST_THOST = [ '139.198.171.190']
 //Master环境
-def DEPLOY_Master_THOST = [ '39.101.1.156']
+def DEPLOY_Master_THOST = [ '139.198.171.190']
 //生产环境
-def DEPLOY_PRO_THOST = [ '39.101.1.156']
+def DEPLOY_PRO_THOST = [ '139.198.171.190']
 
 pipeline {
     
@@ -178,7 +178,7 @@ pipeline {
                                               configName: deployip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
-                                              execCommand: "/root/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
                                             //   execCommand: "echo 'aaa'> /opt/test.txt", 
                                               execTimeout: 920000,
                                               flatten: false, makeEmptyDirs: false, 
