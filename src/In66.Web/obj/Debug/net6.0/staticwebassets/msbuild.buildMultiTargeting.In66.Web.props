@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\In66.Web.props" />
+</Project>

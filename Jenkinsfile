@@ -1,11 +1,11 @@
 //开发环境
-def DEPLOY_DEV_HOST = [ '116.62.214.239']
+def DEPLOY_DEV_HOST = [ '139.198.171.190']
 //测试环境
-def DEPLOY_TEST_THOST = [ '116.62.214.239']
+def DEPLOY_TEST_THOST = [ '139.198.171.190']
 //Master环境
-def DEPLOY_Master_THOST = [ '116.62.214.239']
+def DEPLOY_Master_THOST = [ '139.198.171.190']
 //生产环境
-def DEPLOY_PRO_THOST = [ '116.62.214.239']
+def DEPLOY_PRO_THOST = [ '139.198.171.190']
 
 pipeline {
     
@@ -14,10 +14,10 @@ pipeline {
 
         project_name = "${JOB_NAME}"
 
-        git_url = "git@codeup.aliyun.com:617109303962cc4bc2b6bdf6/net/In66.Web.git"  
+        git_url = "git@github.com:yanh19930226/mytest.git"  
         
-        haror_auth="harborid"  
-        harbor_url="39.101.1.156:89"  
+        haror_auth="harbor"  
+        harbor_url="8.130.109.62"  
         harbor_project_name = "${JOB_NAME}"
         
         imageName="${project_name}:${branch}"
@@ -55,6 +55,8 @@ pipeline {
                 environment name:'deploymode', value:'deploy' 
             }           
             steps { 
+
+                // git branch: "${branch}", credentialsId: 'jenkins', url: "${git_url}"
 
                 checkout([$class: 'GitSCM', 
                    branches: [[name: '${branch}']],
@@ -94,6 +96,8 @@ pipeline {
             steps {  
                
                 script{
+
+                   //mian
              
                    sh "docker build -t  ${imageName} ."
                
@@ -103,7 +107,7 @@ pipeline {
             }
         }
 
-        stage('制作发布镜像发布') {
+         stage('制作发布镜像发布') {
 
             when {
 
@@ -132,37 +136,236 @@ pipeline {
             }
         }
 
-        stage ("发布k8syml脚本") {
-            steps {
-                sshPublisher(
-                publishers: [
-                sshPublisherDesc(
-                configName: '139.198.191.106', 
-                transfers: 
-                [
-                    sshTransfer
-                (cleanRemote: false, 
-                excludes: '', 
-                execCommand: '', 
-                execTimeout: 120000, 
-                flatten: false, 
-                makeEmptyDirs: false, 
-                noDefaultExcludes: false, 
-                patternSeparator: '[, ]+', 
-                remoteDirectory: '', 
-                remoteDirectorySDF: false, 
-                removePrefix: '', 
-                sourceFiles: 'pipeline.yml'
-                )], 
-                usePromotionTimestamp: false, 
-                useWorkspaceInPromotion: false, 
-                verbose: false
-                )])
+        stage ("部署镜像") {
+            when {
+                environment name:'deploymode', value:'deploy' 
+            }
+            steps {  
+                script {
+                    switch("${branch}"){
+                        case 'dev':
+                            println("开始部署${branch}分支")
+                            for (deployip in DEPLOY_DEV_HOST){
+                                  echo "服务器Ip:${deployip}"
+                                  
+                                  sshPublisher(
+                                          publishers: [sshPublisherDesc(
+                                              configName: deployip, 
+                                              transfers: [sshTransfer(cleanRemote: false,
+                                              excludes: '',
+                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execTimeout: 120000,
+                                              flatten: false, makeEmptyDirs: false, 
+                                              noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                              remoteDirectory: '',
+                                              remoteDirectorySDF: false,
+                                              removePrefix: '', 
+                                              sourceFiles: '')], 
+                                              usePromotionTimestamp: false, 
+                                              useWorkspaceInPromotion: false,
+                                              verbose: false)]
+                                           )
+
+                                  echo "${branch}部署完成"
+                            }
+                        break;
+                        case 'test':
+                            println("开始部署${branch}分支")
+                            for (deployip in DEPLOY_TEST_THOST){
+
+                                  echo "服务器Ip:${deployip}"
+                                  
+                                  sshPublisher(
+                                          publishers: [sshPublisherDesc(
+                                              configName: deployip, 
+                                              transfers: [sshTransfer(cleanRemote: false,
+                                              excludes: '',
+                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execTimeout: 120000,
+                                              flatten: false, makeEmptyDirs: false, 
+                                              noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                              remoteDirectory: '',
+                                              remoteDirectorySDF: false,
+                                              removePrefix: '', 
+                                              sourceFiles: '')], 
+                                              usePromotionTimestamp: false, 
+                                              useWorkspaceInPromotion: false,
+                                              verbose: false)]
+                                           )
+
+                                  echo "${branch}部署完成"
+                            }
+                            break;
+                        case 'main':
+                            println("开始部署${branch}分支")
+                            for (deployip in DEPLOY_Master_THOST){
+
+                                    echo "服务器Ip:${deployip}"
+
+                                    sshPublisher(
+                                          publishers: [sshPublisherDesc(
+                                              configName: deployip, 
+                                              transfers: [sshTransfer(cleanRemote: false,
+                                              excludes: '',
+                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execTimeout: 120000,
+                                              flatten: false, makeEmptyDirs: false, 
+                                              noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                              remoteDirectory: '',
+                                              remoteDirectorySDF: false,
+                                              removePrefix: '', 
+                                              sourceFiles: '')], 
+                                              usePromotionTimestamp: false, 
+                                              useWorkspaceInPromotion: false,
+                                              verbose: false)]
+                                           )
+
+                                    echo "${branch}部署完成"
+                            }
+                            break;
+                        default:
+                            println("开始部署${branch}分支")
+                            for (deployip in DEPLOY_PRO_THOST){
+
+                                  echo "服务器Ip:${deployip}"
+
+                                  sshPublisher(
+                                        publishers: [sshPublisherDesc(
+                                            configName: deployip, 
+                                            transfers: [sshTransfer(cleanRemote: false,
+                                            excludes: '',
+                                            execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                            execTimeout: 120000,
+                                            flatten: false, makeEmptyDirs: false, 
+                                            noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                            remoteDirectory: '',
+                                            remoteDirectorySDF: false,
+                                            removePrefix: '', 
+                                            sourceFiles: '')], 
+                                            usePromotionTimestamp: false, 
+                                            useWorkspaceInPromotion: false,
+                                            verbose: false)]
+                                         )
+                                  echo "${branch}部署完成"
+                            }
+                            echo "${branch}部署完成"
+                            break;
+                    }   
+                }              
             }
         }
-        stage('k8syml文件部署') {
-            steps {
-                sh 'ssh root@139.198.191.106 kubectl apply -f /usr/local/k8s/pipeline.yml'
+ 
+        stage ("回滚镜像") {
+            when {
+                environment name:'deploymode', value:'rollback' 
+            }
+            steps {  
+            println("开始回滚")
+                script {
+                    switch("${branch}"){
+                        case 'dev':
+                            println("开始回滚${branch}环境")
+                            for (rollbackip in DEPLOY_DEV_HOST){
+
+                                 sshPublisher(
+                                          publishers: [sshPublisherDesc(
+                                              configName: rollbackip, 
+                                              transfers: [sshTransfer(cleanRemote: false,
+                                              excludes: '',
+                                              execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execTimeout: 120000,
+                                              flatten: false, makeEmptyDirs: false, 
+                                              noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                              remoteDirectory: '',
+                                              remoteDirectorySDF: false,
+                                              removePrefix: '', 
+                                              sourceFiles: '')], 
+                                              usePromotionTimestamp: false, 
+                                              useWorkspaceInPromotion: false,
+                                              verbose: false)]
+                                           )
+
+                                echo "回滚完成"
+                            }
+                        break;
+                        case 'test':
+                            println("开始回滚${branch}环境")
+                            for (rollbackip in DEPLOY_TEST_THOST){
+                                sshPublisher(
+                                          publishers: [sshPublisherDesc(
+                                              configName: rollbackip, 
+                                              transfers: [sshTransfer(cleanRemote: false,
+                                              excludes: '',
+                                              execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execTimeout: 120000,
+                                              flatten: false, makeEmptyDirs: false, 
+                                              noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                              remoteDirectory: '',
+                                              remoteDirectorySDF: false,
+                                              removePrefix: '', 
+                                              sourceFiles: '')], 
+                                              usePromotionTimestamp: false, 
+                                              useWorkspaceInPromotion: false,
+                                              verbose: false)]
+                                           )
+                                
+
+                                echo "回滚完成"
+                            }
+                            break;
+                        case 'main':
+                            println("开始回滚${branch}环境")
+                            for (rollbackip in DEPLOY_Master_THOST){
+                                sshPublisher(
+                                          publishers: [sshPublisherDesc(
+                                              configName: rollbackip, 
+                                              transfers: [sshTransfer(cleanRemote: false,
+                                              excludes: '',
+                                              execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execTimeout: 120000,
+                                              flatten: false, makeEmptyDirs: false, 
+                                              noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                              remoteDirectory: '',
+                                              remoteDirectorySDF: false,
+                                              removePrefix: '', 
+                                              sourceFiles: '')], 
+                                              usePromotionTimestamp: false, 
+                                              useWorkspaceInPromotion: false,
+                                              verbose: false)]
+                                           )
+                                
+                                echo "回滚完成"
+                            }
+                            break;
+                         default:
+                            println("开始回滚${branch}分支")
+
+                             for (rollbackip in DEPLOY_PRO_THOST){
+
+                                sshPublisher(
+                                          publishers: [sshPublisherDesc(
+                                              configName: rollbackip, 
+                                              transfers: [sshTransfer(cleanRemote: false,
+                                              excludes: '',
+                                              execCommand: "/opt/jenkins_shell/rollback.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execTimeout: 120000,
+                                              flatten: false, makeEmptyDirs: false, 
+                                              noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                              remoteDirectory: '',
+                                              remoteDirectorySDF: false,
+                                              removePrefix: '', 
+                                              sourceFiles: '')], 
+                                              usePromotionTimestamp: false, 
+                                              useWorkspaceInPromotion: false,
+                                              verbose: false)]
+                                           )
+
+                                echo "回滚完成"
+                            }
+                            echo "${branch}回滚完成"
+                            break;
+                    }   
+                }
             }
         }
        

@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "E:\\In66.Web\\mytest\\src\\In66.Web\\In66.Web.csproj": {}
+    "D:\\code\\mytest\\src\\In66.Web\\In66.Web.csproj": {}
   },
   "projects": {
-    "E:\\In66.Web\\mytest\\src\\In66.Web\\In66.Web.csproj": {
+    "D:\\code\\mytest\\src\\In66.Web\\In66.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\In66.Web\\mytest\\src\\In66.Web\\In66.Web.csproj",
+        "projectUniqueName": "D:\\code\\mytest\\src\\In66.Web\\In66.Web.csproj",
         "projectName": "In66.Web",
-        "projectPath": "E:\\In66.Web\\mytest\\src\\In66.Web\\In66.Web.csproj",
+        "projectPath": "D:\\code\\mytest\\src\\In66.Web\\In66.Web.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "E:\\In66.Web\\mytest\\src\\In66.Web\\obj\\",
+        "outputPath": "D:\\code\\mytest\\src\\In66.Web\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\develop\\vs2022\\shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -51,7 +55,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -63,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
