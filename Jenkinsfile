@@ -178,7 +178,7 @@ pipeline {
                                               configName: deployip, 
                                               transfers: [sshTransfer(cleanRemote: false,
                                               excludes: '',
-                                              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
+                                              execCommand: "/root/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
                                             //   execCommand: "echo 'aaa'> /opt/test.txt", 
                                               execTimeout: 120000,
                                               flatten: false, makeEmptyDirs: false, 
