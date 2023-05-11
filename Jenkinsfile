@@ -1,11 +1,11 @@
 //开发环境
-def DEPLOY_DEV_HOST = [ '139.198.171.190']
+def DEPLOY_DEV_HOST = [ '139.198.164.165']
 //测试环境
-def DEPLOY_TEST_THOST = [ '139.198.171.190']
+def DEPLOY_TEST_THOST = [ '139.198.164.165']
 //Master环境
-def DEPLOY_Master_THOST = [ '139.198.171.190']
+def DEPLOY_Master_THOST = [ '139.198.164.165']
 //生产环境
-def DEPLOY_PRO_THOST = [ '139.198.171.190']
+def DEPLOY_PRO_THOST = [ '139.198.164.165']
 
 pipeline {
     
@@ -390,11 +390,11 @@ pipeline {
        
         aborted {
             //当此Pipeline 终止时打印消息
-            echo 'aborted'  
+            echo 'aborted'
         }
         changed {
             //当pipeline的状态与上一次build状态不同时打印消息
-            echo 'changed'          
+            echo 'changed'       
         }    
         unstable {
            dingtalk (
