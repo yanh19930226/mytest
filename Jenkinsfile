@@ -180,7 +180,7 @@ pipeline {
                                               excludes: '',
                                               execCommand: "/root/deploy.sh $harbor_url $project_name $tagImageName $port $containerport", 
                                             //   execCommand: "echo 'aaa'> /opt/test.txt", 
-                                              execTimeout: 120000,
+                                              execTimeout: 920000,
                                               flatten: false, makeEmptyDirs: false, 
                                               noDefaultExcludes: false, patternSeparator: '[, ]+',
                                               remoteDirectory: '',
