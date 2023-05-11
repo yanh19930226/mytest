@@ -387,21 +387,21 @@ pipeline {
     }
 
      post {
-        begin {
-            dingtalk (
-                robot: 'jenkins',
-                type:'ACTION_CARD',
-                title: "unstable: ${JOB_NAME}",
-                text: [
-                    "### [${env.JOB_NAME}](${env.JOB_URL}) ",
-                    '---',
-                    "- 任务：[${currentBuild.displayName}](${env.BUILD_URL})",
-                    '- 状态：<font color=#545454 >begin</font>',
-                    "- 持续时间：${currentBuild.durationString}",
-                    "- 执行人：${currentBuild.buildCauses.shortDescription}",
-                  ]
-            )
-        }
+        // begin {
+        //     dingtalk (
+        //         robot: 'jenkins',
+        //         type:'ACTION_CARD',
+        //         title: "unstable: ${JOB_NAME}",
+        //         text: [
+        //             "### [${env.JOB_NAME}](${env.JOB_URL}) ",
+        //             '---',
+        //             "- 任务：[${currentBuild.displayName}](${env.BUILD_URL})",
+        //             '- 状态：<font color=#545454 >begin</font>',
+        //             "- 持续时间：${currentBuild.durationString}",
+        //             "- 执行人：${currentBuild.buildCauses.shortDescription}",
+        //           ]
+        //     )
+        // }
 
         start {
             dingtalk (
@@ -412,7 +412,7 @@ pipeline {
                     "### [${env.JOB_NAME}](${env.JOB_URL}) ",
                     '---',
                     "- 任务：[${currentBuild.displayName}](${env.BUILD_URL})",
-                    '- 状态：<font color=#545454 >begin</font>',
+                    '- 状态：<font color=#545454 >start</font>',
                     "- 持续时间：${currentBuild.durationString}",
                     "- 执行人：${currentBuild.buildCauses.shortDescription}",
                   ]
