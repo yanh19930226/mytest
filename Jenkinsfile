@@ -389,7 +389,7 @@ pipeline {
      post {
         success {
             dingtalk (
-                robot: 'JenkinsRobot',
+                robot: 'jenkins',
                 type:'ACTION_CARD',
                 title: "success: ${JOB_NAME}",
                 text: [
@@ -404,7 +404,7 @@ pipeline {
         }
         failure {
             dingtalk (
-                robot: 'JenkinsRobot',
+                robot: 'jenkins',
                 type:'ACTION_CARD',
                 title: "fail: ${JOB_NAME}",
                 text: [
