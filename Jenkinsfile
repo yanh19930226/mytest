@@ -1,11 +1,11 @@
 //开发环境
-def DEPLOY_DEV_HOST = [ '139.198.171.190']
+def DEPLOY_DEV_HOST = [ '139.198.191.187']
 //测试环境
-def DEPLOY_TEST_THOST = [ '139.198.171.190']
+def DEPLOY_TEST_THOST = [ '139.198.191.187']
 //Master环境
-def DEPLOY_Master_THOST = [ '139.198.171.190']
+def DEPLOY_Master_THOST = [ '139.198.191.187']
 //生产环境
-def DEPLOY_PRO_THOST = [ '139.198.171.190']
+def DEPLOY_PRO_THOST = [ '139.198.191.187']
 
 pipeline {
     
