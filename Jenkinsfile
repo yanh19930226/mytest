@@ -161,7 +161,7 @@ pipeline {
                                               sourceFiles: '')], 
                                               usePromotionTimestamp: false, 
                                               useWorkspaceInPromotion: false,
-                                              verbose: false)]
+                                              verbose: true)]
                                            )
 
                                   echo "${branch}部署完成"
@@ -189,7 +189,7 @@ pipeline {
                                               sourceFiles: '')], 
                                               usePromotionTimestamp: false, 
                                               useWorkspaceInPromotion: false,
-                                              verbose: false)]
+                                              verbose: true)]
                                            )
 
                                   echo "${branch}部署完成"
@@ -243,7 +243,7 @@ pipeline {
                                             sourceFiles: '')], 
                                             usePromotionTimestamp: false, 
                                             useWorkspaceInPromotion: false,
-                                            verbose: false)]
+                                            verbose: true)]
                                          )
                                   echo "${branch}部署完成"
                             }
