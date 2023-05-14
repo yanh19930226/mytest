@@ -2,24 +2,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pipeline
-  namespace: test
+  name: <APP_NAME>
+  namespace: <NAMESPACE>
   labels:
-    app: pipeline
+    app: <APP_NAME>
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: pipeline
+      app: <APP_NAME>
   template:
     metadata:
       labels:
-        app: pipeline
+        app: <APP_NAME>
     spec:
       containers:
-        - image: 39.101.1.156:89/mytest/mytest:k8s
+        - image: 39.101.1.156:89/<APP_NAME>/<APP_NAME>:<APP_TAG>
           imagePullPolicy: Always
-          name: pipeline
+          name: <APP_NAME>
           ports:
             - containerPort: 80
       imagePullSecrets:
@@ -30,12 +30,12 @@ kind: Service
 metadata:
   annotations: {}
   labels:
-    app: pipeline
-  name: pipeline
-  namespace: test
+    app: <APP_NAME>
+  name: <APP_NAME>
+  namespace: <NAMESPACE>
 spec:
   selector:
-    app: pipeline
+    app: <APP_NAME>
   ports:
   - port: 8080
     targetPort: 80
