@@ -151,7 +151,7 @@ pipeline {
                 makeEmptyDirs: false, 
                 noDefaultExcludes: false, 
                 patternSeparator: '[, ]+', 
-                remoteDirectory: '', 
+                remoteDirectory: '/usr/local/k8s', 
                 remoteDirectorySDF: false, 
                 removePrefix: '', 
                 sourceFiles: 'pipeline.yml'
