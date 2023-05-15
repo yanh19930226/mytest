@@ -65,27 +65,19 @@ pipeline {
         //     }
         // }
 
-        // stage('代码质量检测') {
-        //     when {
-        //         anyOf {
-        //               environment name: 'sonarqube', value: 'true'
-        //             //   environment name: 'deploymode', value: 'deploy'
-        //         }
-        //     } 
-        //     steps {
+        stage('代码质量检测') {
+            // when {
+            //     anyOf {
+            //           environment name: 'sonarqube', value: 'true'
+            //         //   environment name: 'deploymode', value: 'deploy'
+            //     }
+            // } 
+            steps {
 
-        //         echo '代码质量检测'
-
-        //         script {
-        //             scannerHome = tool 'SonarQubeScanner'
-        //         }
-
-        //         withSonarQubeEnv('sonarqube') {
-                  
-        //           sh "${scannerHome}/bin/sonar-scanner"
-        //       }
-        //     }
-        // }
+                 kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
+                 sh 'kubectl get pods'
+            }
+        }
 
         // stage ("构建镜像") {
         //     when {
@@ -134,11 +126,11 @@ pipeline {
         //     }
         // }
 
-       stage('Apply Kubernetes files') {
-                 kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
-                 sh 'kubectl get pods'
-        }
-       }
+    //    stage('Apply Kubernetes files') {
+    //              kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
+    //              sh 'kubectl get pods'
+    //     }
+    //    }
 
         stage('清理工作空间') {
             steps {
