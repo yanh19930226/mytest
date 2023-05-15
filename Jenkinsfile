@@ -78,6 +78,7 @@ pipeline {
                  sh 'kubectl get pods'
             }
         }
+        }
 
         // stage ("构建镜像") {
         //     when {
