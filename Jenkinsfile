@@ -14,19 +14,13 @@ pipeline {
     }
 
     environment {
-
         project_name = "${JOB_NAME}"
-
         git_url = "git@github.com:yanh19930226/mytest.git"  
-        
         haror_auth="harbor"  
         harbor_url="8.130.109.62"  
         harbor_project_name = "${JOB_NAME}"
-        
         imageName="${project_name}:${branch}"
-
         tagImageName="${harbor_url}/${harbor_project_name}/${project_name}:${branch}" 
-
         kubeconfig_id="5626b560-cfe7-4354-91da-7aee2b9c0405"
     }
 
