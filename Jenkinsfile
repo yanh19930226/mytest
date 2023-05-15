@@ -167,8 +167,19 @@ pipeline {
      post {
        
         aborted {
-            //当此Pipeline 终止时打印消息
-            echo 'aborted'
+            dingtalk (
+                robot: 'jenkins',
+                type:'ACTION_CARD',
+                title: "unstable: ${JOB_NAME}",
+                text: [
+                    "### [${env.JOB_NAME}](${env.JOB_URL}) ",
+                    '---',
+                    "- 任务：[${currentBuild.displayName}](${env.BUILD_URL})",
+                    '- 状态：<font color=#FF8000 >中止</font>',
+                    "- 持续时间：${currentBuild.durationString}",
+                    "- 执行人：${currentBuild.buildCauses.shortDescription}",
+                  ]
+            )
         }
         changed {
             //当pipeline的状态与上一次build状态不同时打印消息
