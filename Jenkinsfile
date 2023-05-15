@@ -9,9 +9,7 @@ def DEPLOY_PRO_THOST = [ '139.198.171.190']
 
 pipeline {
    agent {
-      kubernetes {
-        label 'k8s'
-      }
+        label 'slave'
     }
     environment {
 
