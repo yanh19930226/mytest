@@ -50,89 +50,89 @@ pipeline {
 
 
     stages {
-        stage ("Git拉取代码") {
-            when {
-                environment name:'deploymode', value:'deploy' 
-            }           
-            steps { 
+        // stage ("Git拉取代码") {
+        //     when {
+        //         environment name:'deploymode', value:'deploy' 
+        //     }           
+        //     steps { 
 
-                checkout([$class: 'GitSCM', 
-                   branches: [[name: '${branch}']],
-                   extensions: [], 
-                   userRemoteConfigs: [[credentialsId: 'jenkins',
-                   url: "${git_url}"]]]
-                  )
-            }
-        }
+        //         checkout([$class: 'GitSCM', 
+        //            branches: [[name: '${branch}']],
+        //            extensions: [], 
+        //            userRemoteConfigs: [[credentialsId: 'jenkins',
+        //            url: "${git_url}"]]]
+        //           )
+        //     }
+        // }
 
-        stage('代码质量检测') {
-            when {
-                anyOf {
-                      environment name: 'sonarqube', value: 'true'
-                    //   environment name: 'deploymode', value: 'deploy'
-                }
-            } 
-            steps {
+        // stage('代码质量检测') {
+        //     when {
+        //         anyOf {
+        //               environment name: 'sonarqube', value: 'true'
+        //             //   environment name: 'deploymode', value: 'deploy'
+        //         }
+        //     } 
+        //     steps {
 
-                echo '代码质量检测'
+        //         echo '代码质量检测'
 
-                script {
-                    scannerHome = tool 'SonarQubeScanner'
-                }
+        //         script {
+        //             scannerHome = tool 'SonarQubeScanner'
+        //         }
 
-                withSonarQubeEnv('sonarqube') {
+        //         withSonarQubeEnv('sonarqube') {
                   
-                  sh "${scannerHome}/bin/sonar-scanner"
-              }
-            }
-        }
+        //           sh "${scannerHome}/bin/sonar-scanner"
+        //       }
+        //     }
+        // }
 
-        stage ("构建镜像") {
-            when {
-                environment name:'deploymode', value:'deploy' 
-            }    
-            steps {  
+        // stage ("构建镜像") {
+        //     when {
+        //         environment name:'deploymode', value:'deploy' 
+        //     }    
+        //     steps {  
                
-                script{
+        //         script{
 
-                   //mian
+        //            //mian
              
-                   sh "docker build -t  ${imageName} ."
+        //            sh "docker build -t  ${imageName} ."
                
-                   sh "docker tag ${imageName} ${tagImageName}"
+        //            sh "docker tag ${imageName} ${tagImageName}"
 
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
 
-         stage('制作发布镜像发布') {
+        //  stage('制作发布镜像发布') {
 
-            when {
+        //     when {
 
-                environment name:'deploymode', value:'deploy'
+        //         environment name:'deploymode', value:'deploy'
 
-            }  
+        //     }  
 
-            steps {
+        //     steps {
                
-                withCredentials([usernamePassword(credentialsId: "${haror_auth}", passwordVariable: 'password', usernameVariable: 'username')]) {
+        //         withCredentials([usernamePassword(credentialsId: "${haror_auth}", passwordVariable: 'password', usernameVariable: 'username')]) {
 
-                    echo "push image"
+        //             echo "push image"
                     
-                    sh "docker login -u ${username}  -p ${password} ${harbor_url}"
+        //             sh "docker login -u ${username}  -p ${password} ${harbor_url}"
                    
-                    sh "docker push ${tagImageName}"
+        //             sh "docker push ${tagImageName}"
 
-                    echo "镜像上传成功"
+        //             echo "镜像上传成功"
 
-                    sh "docker rmi -f ${imageName}"
+        //             sh "docker rmi -f ${imageName}"
 
-                    sh "docker rmi -f ${tagImageName}"
+        //             sh "docker rmi -f ${tagImageName}"
                     
-                    echo "删除本地镜像成功"
-                }
-            }
-        }
+        //             echo "删除本地镜像成功"
+        //         }
+        //     }
+        // }
 
        stage('Apply Kubernetes files') {
                  kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
