@@ -8,9 +8,11 @@ def DEPLOY_Master_THOST = [ '139.198.171.190']
 def DEPLOY_PRO_THOST = [ '139.198.171.190']
 
 pipeline {
-   agent {
-        label 'slave'
+
+    agent {
+        label 'jnlp'
     }
+
     environment {
 
         project_name = "${JOB_NAME}"
