@@ -8,8 +8,11 @@ def DEPLOY_Master_THOST = [ '139.198.171.190']
 def DEPLOY_PRO_THOST = [ '139.198.171.190']
 
 pipeline {
-    
-    agent any
+   agent {
+    kubernetes {
+      label 'k8s'
+    }
+  }
     environment {
 
         project_name = "${JOB_NAME}"
@@ -23,6 +26,8 @@ pipeline {
         imageName="${project_name}:${branch}"
 
         tagImageName="${harbor_url}/${harbor_project_name}/${project_name}:${branch}" 
+
+        kubeconfig_id="5626b560-cfe7-4354-91da-7aee2b9c0405"
     }
 
     options {
@@ -130,9 +135,11 @@ pipeline {
          stage('K8sDeploy') {
             steps {
 
-                 kubeconfig(credentialsId: 'k8s', caCertificate: '',serverUrl: 'https://139.198.171.190:6443') {
-                 sh 'kubectl get pods'
-                }
+                sh 'kubectl get pods'
+
+                //  kubeconfig(credentialsId: 'k8s', caCertificate: '',serverUrl: 'https://139.198.171.190:6443') {
+                 
+                // }
             }
         }
 
