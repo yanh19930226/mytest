@@ -50,34 +50,34 @@ pipeline {
 
 
     stages {
-        // stage ("Git拉取代码") {
-        //     when {
-        //         environment name:'deploymode', value:'deploy' 
-        //     }           
-        //     steps { 
+        stage ("Git拉取代码") {
+            when {
+                environment name:'deploymode', value:'deploy' 
+            }           
+            steps { 
 
-        //         checkout([$class: 'GitSCM', 
-        //            branches: [[name: '${branch}']],
-        //            extensions: [], 
-        //            userRemoteConfigs: [[credentialsId: 'jenkins',
-        //            url: "${git_url}"]]]
-        //           )
-        //     }
-        // }
-
-        stage('代码质量检测') {
-            // when {
-            //     anyOf {
-            //           environment name: 'sonarqube', value: 'true'
-            //         //   environment name: 'deploymode', value: 'deploy'
-            //     }
-            // } 
-            steps {
-
-                 kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
-                 sh 'kubectl get pods'
+                checkout([$class: 'GitSCM', 
+                   branches: [[name: '${branch}']],
+                   extensions: [], 
+                   userRemoteConfigs: [[credentialsId: 'jenkins',
+                   url: "${git_url}"]]]
+                  )
             }
         }
+
+        stage('代码质量检测') {
+            when {
+                anyOf {
+                      environment name: 'sonarqube', value: 'true'
+                    //   environment name: 'deploymode', value: 'deploy'
+                }
+            } 
+            // steps {
+
+            //      kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
+            //      sh 'kubectl get pods'
+            //     }
+            // }
         }
 
         // stage ("构建镜像") {
@@ -127,11 +127,14 @@ pipeline {
         //     }
         // }
 
-    //    stage('Apply Kubernetes files') {
-    //              kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
-    //              sh 'kubectl get pods'
-    //     }
-    //    }
+         stage('K8sDeploy') {
+            steps {
+
+                 kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
+                 sh 'kubectl get pods'
+                }
+            }
+        }
 
         stage('清理工作空间') {
             steps {
