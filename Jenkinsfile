@@ -130,20 +130,20 @@ pipeline {
         //     }
         // }
 
-         stage('K8sDeploy') {
-            steps {
+        // stage('K8sDeploy') {
+        //     steps {
 
 
-                //  kubeconfig(credentialsId: 'k8s', caCertificate: '',serverUrl: 'https://139.198.171.190:6443') {
+        //         //  kubeconfig(credentialsId: 'k8s', caCertificate: '',serverUrl: 'https://139.198.171.190:6443') {
                  
-                // }
+        //         // }
 
-                 configFileProvider([configFile(fileId: "5626b560-cfe7-4354-91da-7aee2b9c0405", targetLocation: 'kubeconfig')]) {
-                    sh 'kubectl get pods'
-               } 
+        //          configFileProvider([configFile(fileId: "5626b560-cfe7-4354-91da-7aee2b9c0405", targetLocation: 'kubeconfig')]) {
+        //             sh 'kubectl get pods'
+        //        } 
 
-            }
-        }
+        //     }
+        // }
 
         stage('清理工作空间') {
             steps {
