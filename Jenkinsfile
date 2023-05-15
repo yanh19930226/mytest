@@ -87,7 +87,7 @@ pipeline {
             }
         }
 
-        stage ("代码构建镜像") {
+        stage ("构建镜像") {
             when {
                 environment name:'deploymode', value:'deploy' 
             }    
@@ -134,42 +134,12 @@ pipeline {
             }
         }
 
-          stage ("发布k8syml脚本") {
-            steps {
-                sshPublisher(
-                publishers: [
-                sshPublisherDesc(
-                configName: '139.198.171.190', 
-                transfers: 
-                [
-                    sshTransfer
-                (cleanRemote: false, 
-                excludes: '', 
-                execCommand: '', 
-                execTimeout: 120000, 
-                flatten: false, 
-                makeEmptyDirs: false, 
-                noDefaultExcludes: false, 
-                patternSeparator: '[, ]+', 
-                remoteDirectory: '/root',  
-                remoteDirectorySDF: false, 
-                removePrefix: '', 
-                sourceFiles: 'pipeline.yml'
-                )], 
-                usePromotionTimestamp: false, 
-                useWorkspaceInPromotion: false, 
-                verbose: true
-                )])
-            }
+       stage('Apply Kubernetes files') {
+                 kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
+                 sh 'kubectl get pods'
         }
-        stage('k8syml文件部署') {
-            steps {
+       }
 
-                sh "ssh root@139.198.171.190 echo 'hello world' > /usr/local/k8s/text.txt"
-                sh 'ssh root@139.198.171.190 kubectl apply -f /usr/local/k8s/pipeline.yml'
-            }
-        }
-       
         stage('清理工作空间') {
             steps {
               cleanWs(
