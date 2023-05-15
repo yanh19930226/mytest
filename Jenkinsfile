@@ -130,7 +130,7 @@ pipeline {
          stage('K8sDeploy') {
             steps {
 
-                 kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
+                 kubeconfig(credentialsId: 'k8s', caCertificate: '',serverUrl: 'https://139.198.171.190:6443') {
                  sh 'kubectl get pods'
                 }
             }
