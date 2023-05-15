@@ -65,20 +65,20 @@ pipeline {
             }
         }
 
-        stage('代码质量检测') {
-            when {
-                anyOf {
-                      environment name: 'sonarqube', value: 'true'
-                    //   environment name: 'deploymode', value: 'deploy'
-                }
-            } 
-            // steps {
+        // stage('代码质量检测') {
+        //     when {
+        //         anyOf {
+        //               environment name: 'sonarqube', value: 'true'
+        //             //   environment name: 'deploymode', value: 'deploy'
+        //         }
+        //     } 
+        //     // steps {
 
-            //      kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
-            //      sh 'kubectl get pods'
-            //     }
-            // }
-        }
+        //     //      kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
+        //     //      sh 'kubectl get pods'
+        //     //     }
+        //     // }
+        // }
 
         // stage ("构建镜像") {
         //     when {
