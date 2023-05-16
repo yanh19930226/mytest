@@ -36,6 +36,9 @@ spec:
       command:
         - "cat"
       volumeMounts:
+        - mountPath: /etc/hosts
+          name: volume-hosts
+          readOnly: false
         - mountPath: /etc/localtime
           name: volume-time
           readOnly: false
