@@ -21,7 +21,7 @@ pipeline {
         harbor_project_name = "${JOB_NAME}"
         imageName="${project_name}:${branch}"
         tagImageName="${harbor_url}/${harbor_project_name}/${project_name}:${branch}" 
-        kubeconfig_id="5626b560-cfe7-4354-91da-7aee2b9c0405"
+        // kubeconfig_id="5626b560-cfe7-4354-91da-7aee2b9c0405"
     }
 
     options {
@@ -53,15 +53,16 @@ pipeline {
             when {
                 environment name:'deploymode', value:'deploy' 
             }           
-            steps { 
+            // steps { 
 
-                checkout([$class: 'GitSCM', 
-                   branches: [[name: '${branch}']],
-                   extensions: [], 
-                   userRemoteConfigs: [[credentialsId: 'jenkins',
-                   url: "${git_url}"]]]
-                  )
-            }
+            //     checkout([$class: 'GitSCM', 
+            //        branches: [[name: '${branch}']],
+            //        extensions: [], 
+            //        userRemoteConfigs: [[credentialsId: 'jenkins',
+            //        url: "${git_url}"]]]
+            //       )
+            // }
+            checkout scmGit(branches: [[name: '${branch}']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/yanh19930226/mytest.git']])
         }
 
         // stage('代码质量检测') {
