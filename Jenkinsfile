@@ -5,7 +5,6 @@ pipeline {
       cloud "kubernetes"
       namespace "default"
       slaveConnectTimeout 1200
-      inheritFrom 'jenkins-slave'
       yamlFile 'podtemplate.yaml'
     }
   }
@@ -24,7 +23,7 @@ pipeline {
       //images
       PROJECT_NAME = "${JOB_NAME}"
       IMAGE_NAME="${PROJECT_NAME}:${BRANCH}"
-      TAG_IMAGE_NAME="${HARBOR_URL}/${harbor_PROJECT_NAME}/${PROJECT_NAME}:${BRANCH}"
+      TAG_IMAGE_NAME="${HARBOR_URL}/${HARBOR_PROJECT_NAME}/${PROJECT_NAME}:${BRANCH}"
 
   }
 
@@ -57,82 +56,69 @@ pipeline {
 
     stage ("Git拉取代码") {
 
-            //如果是部署模式重新拉取代码
-            when {
-                environment name:'deploymode', value:'deploy' 
-            }           
-            steps { 
-
-                 container(name: 'docker') {
-
-                    checkout([
-                         $class: 'GitSCM', 
-                         branches: [[name: "${BRANCH}"]],
-                         extensions: [], 
-                         userRemoteConfigs: [[
-                             credentialsId: "${GIT_CREDENTIAL_ID}",
-                             url: "${GIT_URL}"
-                         ]]
-                    ])
-
-                 }
-            }
+        //如果是部署模式重新拉取代码
+        when {
+            environment name:'deploymode', value:'deploy' 
         }
+
+        steps { 
+             container(name: 'docker') {
+                checkout([
+                     $class: 'GitSCM', 
+                     branches: [[name: "${BRANCH}"]],
+                     extensions: [], 
+                     userRemoteConfigs: [[
+                         credentialsId: "${GIT_CREDENTIAL_ID}",
+                         url: "${GIT_URL}"
+                     ]]
+                ])
+             }
+        }
+    }
 
     stage('构建镜像') {
-      parallel {
-        stage('构建镜像') {
-          steps {
-              container(name: 'docker') {
 
-                   sh "docker build -t  ${IMAGE_NAME} ."
-               
-                   sh "docker tag ${IMAGE_NAME} ${TAG_IMAGE_NAME}"
-              }
-          }
-        }
-        stage('制作发布镜像发布') {
+        steps {
+            container(name: 'docker') {
 
-            when {
+                 sh "docker build -t  ${IMAGE_NAME} ."
+             
+                 sh "docker tag ${IMAGE_NAME} ${TAG_IMAGE_NAME}"
 
-                environment name:'deploymode', value:'deploy'
-
-            }  
-
-            steps {
-               
-                withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-
-                    container(name: 'docker') {
-
-                        echo "push image"
-                    
-                        sh "docker login -u ${USERNAME}  -p ${PASSWORD} ${HARBOR_URL}"
-                    
-                        sh "docker push ${TAG_IMAGE_NAME}"
-
-                        echo "镜像上传成功"
-
-                        sh "docker rmi -f ${IMAGE_NAME}"
-
-                        sh "docker rmi -f ${TAG_IMAGE_NAME}"
-                        
-                        echo "删除本地镜像成功"
-                          
-                   }
-                   
-                }
             }
         }
-      }
     }
-    // stage('部署容器到kubernetes') {
-    //   steps {
-     
-    //   }
-    // }
+
+    stage('发布镜像') {
+
+        when {
+            environment name:'deploymode', value:'deploy'
+        }
+
+        steps {
+               
+            withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                container(name: 'docker') {
+                    echo "push image"
+                
+                    sh "docker login -u ${USERNAME}  -p ${PASSWORD} ${HARBOR_URL}"
+                
+                    sh "docker push ${TAG_IMAGE_NAME}"
+                    echo "镜像上传成功"
+                    sh "docker rmi -f ${IMAGE_NAME}"
+                    sh "docker rmi -f ${TAG_IMAGE_NAME}"
+                    
+                    echo "删除本地镜像成功"
+                      
+               }
+               
+            }
+        }
+    }
+
   }
    post {
+
         aborted {
             dingtalk (
                 robot: 'jenkins',
@@ -148,9 +134,11 @@ pipeline {
                   ]
             )
         }
+
         changed {
             echo 'changed'       
-        }    
+        }
+
         unstable {
            dingtalk (
                 robot: 'jenkins',
@@ -166,6 +154,7 @@ pipeline {
                   ]
             )
         }
+
         success {
             dingtalk (
                 robot: 'jenkins',
@@ -181,6 +170,7 @@ pipeline {
                   ]
             )
         }
+
         failure {
             dingtalk (
                 robot: 'jenkins',
