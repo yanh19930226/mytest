@@ -56,9 +56,9 @@ pipeline {
 
     stage ("Git拉取代码") {
             //如果是部署模式重新拉取代码
-            when {
-                environment name:'deploymode', value:'deploy' 
-            }           
+            // when {
+            //     environment name:'deploymode', value:'deploy' 
+            // }           
             steps { 
 
                  container(name: 'docker') {
