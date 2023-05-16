@@ -1,0 +1,147 @@
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+    #jnlp  
+    - name: jnlp
+      image: jenkins/inbound-agent:4.7-1-jdk11
+      args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: "volume-time"
+          readOnly: false
+    #docker-git     
+    - name: docker
+      image: docker:20.10.21-git
+      imagePullPolicy: IfNotPresent
+      tty: true
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: volume-time
+          readOnly: false
+        - mountPath: /var/run/docker.sock
+          name: volume-docker
+          readOnly: false
+        - mountPath: /etc/hosts
+          name: volume-hosts
+          readOnly: false
+    #kubectl  
+    - name: kubectl
+      image: bitnami/kubectl:1.23.5
+      imagePullPolicy: IfNotPresent
+      tty: true
+      command:
+        - "cat"
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: volume-time
+          readOnly: false
+        - mountPath: /var/run/docker.sock
+          name: volume-docker
+          readOnly: false
+        - mountPath: /root/.kube
+          name: kubeconfig
+          readOnly: false
+        - mountPath: /.kube
+          name: kubeconfig
+          readOnly: false
+    #net      
+    - name: net
+      image: registry.cn-hangzhou.aliyuncs.com/newbe36524/sdk:6.0.406
+      tty: true
+      command:
+        - "cat"
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: volume-time
+          readOnly: false
+    #node
+    - name: node
+      image: node:18.16.0
+      tty: true
+      command:
+        - "cat"
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: volume-time
+    #maven   
+    - name: maven
+      image: maven:3.6.3-openjdk-8
+      tty: true
+      command:
+        - "cat"
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: volume-time
+          readOnly: false
+        - mountPath: /root/.m2
+          name: volume-maven-repo
+          readOnly: false
+      env:
+        - name: "LANGUAGE"
+          value: "en_US:en"
+        - name: "LC_ALL"
+          value: "en_US.UTF-8"
+        - name: "LANG"
+          value: "en_US.UTF-8"
+    #golang
+    - name: golang
+      image: golang:1.20.4
+      imagePullPolicy: IfNotPresent
+      tty: true
+      command:
+        - "cat"
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: valume-2
+      env:
+        - name: "LANGUAGE"
+          value: "en_US:en"
+        - name: "LC_ALL"
+          value: "en_US.UTF-8"
+        - name: "LANG"
+          value: "en_US.UTF-8"
+    #sonarscanner
+    - name: sonarscanner
+      image: emeraldsquad/sonar-scanner:3.1
+      tty: true
+      command:
+        - "cat"
+      volumeMounts:
+        - mountPath: /etc/localtime
+          name: volume-time
+          readOnly: false
+        - mountPath: /root/.m2
+          name: volume-maven-repo
+          readOnly: false
+        - mountPath: /etc/hosts
+          name: volume-hosts
+          readOnly: false
+      env:
+        - name: "LANGUAGE"
+          value: "en_US:en"
+        - name: "LC_ALL"
+          value: "en_US.UTF-8"
+        - name: "LANG"
+          value: "en_US.UTF-8"
+  volumes:
+    - name: volume-maven-repo
+      nfs:
+            server: 172.31.0.4
+            path: /nfs/data
+    - name: volume-time
+      hostPath:
+        path: /usr/share/zoneinfo/Asia/Shanghai
+    - name: kubeconfig
+      secret:
+        secretName: kubeconfig
+        items:
+          - key: config
+            path: config
+    - name: volume-docker
+      hostPath:
+        path: /var/run/docker.sock
+    - name: volume-hosts
+      hostPath:
+        path: /etc/hosts

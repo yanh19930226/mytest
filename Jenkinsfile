@@ -1,167 +1,138 @@
-//开发环境
-def DEPLOY_DEV_HOST = [ '139.198.171.190']
-//测试环境
-def DEPLOY_TEST_THOST = [ '139.198.171.190']
-//Master环境
-def DEPLOY_Master_THOST = [ '139.198.171.190']
-//生产环境
-def DEPLOY_PRO_THOST = [ '139.198.171.190']
-
 pipeline {
-
-    agent {
-        label 'jnlp'
+  agent {
+    kubernetes {
+      label "jenkins-slave"
+      cloud "kubernetes"
+      namespace "default"
+      slaveConnectTimeout 1200
+      yamlFile 'podtemplate.yaml'
     }
+  }
+  
+  environment {
+      
+      //git
+      GIT_CREDENTIAL_ID="git"
+      GIT_URL = "git@codeup.aliyun.com:617109303962cc4bc2b6bdf6/net/In66.Web.git" 
+      
+      //harbor
+      HARBOR_CREDENTIAL_ID="harbor"
+      HARBOR_URL="8.130.109.62"  
+      HARBOR_PROJECT_NAME = "${JOB_NAME}" 
 
-    environment {
-        project_name = "${JOB_NAME}"
-        git_url = "git@github.com:yanh19930226/mytest.git"  
-        haror_auth="harbor"  
-        harbor_url="8.130.109.62"  
-        harbor_project_name = "${JOB_NAME}"
-        imageName="${project_name}:${branch}"
-        tagImageName="${harbor_url}/${harbor_project_name}/${project_name}:${branch}" 
-        // kubeconfig_id="5626b560-cfe7-4354-91da-7aee2b9c0405"
-    }
+      //images
+      PROJECT_NAME = "${JOB_NAME}"
+      IMAGE_NAME="${PROJECT_NAME}:${BRANCH}"
+      TAG_IMAGE_NAME="${HARBOR_URL}/${harbor_PROJECT_NAME}/${PROJECT_NAME}:${BRANCH}"
 
-    options {
-        timestamps()  //构建日志带上时间
-        disableConcurrentBuilds()   // 不允许同时执行流水线
-        timeout(time: 5, unit: "MINUTES")   //设置流水线运行超过5分钟Jenkins将中止流水线
-        buildDiscarder(logRotator(numToKeepStr: "10"))   //表示保留10次构建历史
-    }
+  }
 
-    parameters {
-       choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
-       //git参数
-       gitParameter(
-             branch: '',
-             branchFilter: 'origin.*/(.*)',
-             defaultValue: 'main', // default value 必填
-             name: 'branch',
-             type: 'PT_BRANCH_TAG',
-             description: '选择git分支'
-             )
-       string( name :'port',defaultValue:'',description:'服务port')
-       string( name :'containerport',defaultValue:'',description:'容器port')
-       choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
-    }
+  options {
+     timestamps()  //构建日志中带上时间
+     disableConcurrentBuilds()   // 不允许同时执行流水线
+     timeout(time: 5, unit: "MINUTES")   //设置流水线运行超过5分钟Jenkins将中止流水线
+     buildDiscarder(logRotator(numToKeepStr: "10"))   //表示保留10次构建历史
+  }
 
+  parameters {
+      //部署方式
+      choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
+      //git参数
+      gitParameter(
+            branch: '',
+            branchFilter: 'origin.*/(.*)',
+            defaultValue: 'main', // default value 必填
+            name: 'branch',
+            type: 'PT_BRANCH_TAG',
+            description: '选择git分支tage'
+            )
+      string( name :'port',defaultValue:'',description:'服务port')
+      string( name :'containerport',defaultValue:'',description:'容器port')
+      choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
+  }
 
-    stages {
-        stage ("Git拉取代码") {
+  stages {
+
+    stage ("Git拉取代码") {
+            //如果是部署模式重新拉取代码
             when {
                 environment name:'deploymode', value:'deploy' 
             }           
             steps { 
 
-            //     checkout([$class: 'GitSCM', 
-            //        branches: [[name: '${branch}']],
-            //        extensions: [], 
-            //        userRemoteConfigs: [[credentialsId: 'jenkins',
-            //        url: "${git_url}"]]]
-            //       )
-                checkout scmGit(branches: [[name: '${branch}']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/yanh19930226/mytest.git']])
+                 container(name: 'docker') {
+                    checkout([
+                         $class: 'GitSCM', 
+                         branches: [[name: "${BRANCH}"]],
+                         extensions: [], 
+                         userRemoteConfigs: [[
+                             credentialsId: "${GIT_CREDENTIAL_ID}",
+                             url: "${GIT_URL}"
+                         ]]
+                    ])
+                 }
             }
-            
         }
 
-        // stage('代码质量检测') {
-        //     when {
-        //         anyOf {
-        //               environment name: 'sonarqube', value: 'true'
-        //             //   environment name: 'deploymode', value: 'deploy'
-        //         }
-        //     } 
-        //     // steps {
+    stage('构建镜像') {
+      parallel {
+        stage('构建镜像') {
+          steps {
+              container(name: 'docker') {
 
-        //     //      kubeconfig(credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
-        //     //      sh 'kubectl get pods'
-        //     //     }
-        //     // }
-        // }
-
-        // stage ("构建镜像") {
-        //     when {
-        //         environment name:'deploymode', value:'deploy' 
-        //     }    
-        //     steps {  
+                   sh "docker build -t  ${IMAGE_NAME} ."
                
-        //         script{
+                   sh "docker tag ${IMAGE_NAME} ${TAG_IMAGE_NAME}"
+              }
+          }
+        }
+        stage('制作发布镜像发布') {
 
-        //            //mian
-             
-        //            sh "docker build -t  ${imageName} ."
-               
-        //            sh "docker tag ${imageName} ${tagImageName}"
+            when {
 
-        //         }
-        //     }
-        // }
+                environment name:'deploymode', value:'deploy'
 
-        //  stage('制作发布镜像发布') {
+            }  
 
-        //     when {
-
-        //         environment name:'deploymode', value:'deploy'
-
-        //     }  
-
-        //     steps {
-               
-        //         withCredentials([usernamePassword(credentialsId: "${haror_auth}", passwordVariable: 'password', usernameVariable: 'username')]) {
-
-        //             echo "push image"
-                    
-        //             sh "docker login -u ${username}  -p ${password} ${harbor_url}"
-                   
-        //             sh "docker push ${tagImageName}"
-
-        //             echo "镜像上传成功"
-
-        //             sh "docker rmi -f ${imageName}"
-
-        //             sh "docker rmi -f ${tagImageName}"
-                    
-        //             echo "删除本地镜像成功"
-        //         }
-        //     }
-        // }
-
-        // stage('K8sDeploy') {
-        //     steps {
-
-
-        //         //  kubeconfig(credentialsId: 'k8s', caCertificate: '',serverUrl: 'https://139.198.171.190:6443') {
-                 
-        //         // }
-
-        //          configFileProvider([configFile(fileId: "5626b560-cfe7-4354-91da-7aee2b9c0405", targetLocation: 'kubeconfig')]) {
-        //             sh 'kubectl get pods'
-        //        } 
-
-        //     }
-        // }
-
-        stage('清理工作空间') {
             steps {
-              cleanWs(
-                  cleanWhenAborted: true,
-                  cleanWhenFailure: true,
-                  cleanWhenNotBuilt: true,
-                  cleanWhenSuccess: true,
-                  cleanWhenUnstable: true,
-                  cleanupMatrixParent: true,
-                  // 这个选项是关闭延时删除，立即删除
-                  disableDeferredWipeout: true,
-                  deleteDirs: true
-              )
+               
+                withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+
+                    container(name: 'docker') {
+
+                        echo "push image"
+                    
+                        sh "docker login -u ${USERNAME}  -p ${PASSWORD} ${HARBOR_URL}"
+                    
+                        sh "docker push ${TAG_IMAGE_NAME}"
+
+                        echo "镜像上传成功"
+
+                        sh "docker rmi -f ${IMAGE_NAME}"
+
+                        sh "docker rmi -f ${TAG_IMAGE_NAME}"
+                        
+                        echo "删除本地镜像成功"
+                          
+                   }
+                   
+                }
             }
         }
+        stage('检查kubernetes环境') {
+          steps {
+             
+          }
+        }
+      }
     }
-
-     post {
-       
+    stage('部署容器到kubernetes') {
+      steps {
+     
+      }
+    }
+  }
+   post {
         aborted {
             dingtalk (
                 robot: 'jenkins',
@@ -178,7 +149,6 @@ pipeline {
             )
         }
         changed {
-            //当pipeline的状态与上一次build状态不同时打印消息
             echo 'changed'       
         }    
         unstable {
