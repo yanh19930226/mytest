@@ -13,7 +13,7 @@ pipeline {
       
       //git
       GIT_CREDENTIAL_ID="git"
-      GIT_URL = "git@codeup.aliyun.com:617109303962cc4bc2b6bdf6/net/In66.Web.git" 
+      GIT_URL = "git@github.com:yanh19930226/mytest.git" 
       
       //harbor
       HARBOR_CREDENTIAL_ID="harbor"
