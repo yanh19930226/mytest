@@ -94,7 +94,7 @@ spec:
         - "cat"
       volumeMounts:
         - mountPath: /etc/localtime
-          name: valume-2
+          name: volume-time
       env:
         - name: "LANGUAGE"
           value: "en_US:en"
