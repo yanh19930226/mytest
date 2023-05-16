@@ -127,10 +127,10 @@ spec:
     #     - name: "LANG"
     #       value: "en_US.UTF-8"
   volumes:
-    - name: volume-maven-repo
-      nfs:
-            server: 172.31.0.4
-            path: /nfs/data
+    # - name: volume-maven-repo
+    #   nfs:
+    #         server: 172.31.0.4
+    #         path: /nfs/data
     - name: volume-time
       hostPath:
         path: /usr/share/zoneinfo/Asia/Shanghai
