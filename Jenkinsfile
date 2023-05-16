@@ -42,7 +42,7 @@ pipeline {
             branch: '',
             branchFilter: 'origin.*/(.*)',
             defaultValue: 'main', // default value 必填
-            name: 'branch',
+            name: 'BRANCH',
             type: 'PT_BRANCH_TAG',
             description: '选择git分支tage'
             )
