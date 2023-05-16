@@ -12,7 +12,7 @@ spec:
       imagePullPolicy: IfNotPresent
       volumeMounts:
         - mountPath: /etc/localtime
-          name: "volume-time"
+          name: volume-time
           readOnly: false
     #docker-git     
     - name: docker
@@ -44,9 +44,6 @@ spec:
           name: volume-docker
           readOnly: false
         - mountPath: /root/.kube
-          name: kubeconfig
-          readOnly: false
-        - mountPath: /.kube
           name: kubeconfig
           readOnly: false
     #net      
