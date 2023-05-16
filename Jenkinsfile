@@ -5,6 +5,7 @@ pipeline {
       cloud "kubernetes"
       namespace "default"
       slaveConnectTimeout 1200
+      inheritFrom 'jenkins-slave'
       yamlFile 'podtemplate.yaml'
     }
   }
@@ -55,7 +56,7 @@ pipeline {
   stages {
 
     stage ("Git拉取代码") {
-        
+
             //如果是部署模式重新拉取代码
             when {
                 environment name:'deploymode', value:'deploy' 
