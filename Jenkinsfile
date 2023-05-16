@@ -34,7 +34,7 @@ pipeline {
      buildDiscarder(logRotator(numToKeepStr: "10"))   //表示保留10次构建历史
   }
 
-  parameters {
+//   parameters {
       //部署方式
     //   choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
       //git参数
@@ -50,7 +50,7 @@ pipeline {
     //   string( name :'port',defaultValue:'',description:'服务port')
     //   string( name :'containerport',defaultValue:'',description:'容器port')
     //   choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
-  }
+//   }
 
   stages {
 
@@ -126,18 +126,18 @@ pipeline {
                 }
             }
         }
-        stage('检查kubernetes环境') {
-          steps {
+        // stage('检查kubernetes环境') {
+        //   steps {
              
-          }
-        }
+        //   }
+        // }
       }
     }
-    stage('部署容器到kubernetes') {
-      steps {
+    // stage('部署容器到kubernetes') {
+    //   steps {
      
-      }
-    }
+    //   }
+    // }
   }
    post {
         aborted {
