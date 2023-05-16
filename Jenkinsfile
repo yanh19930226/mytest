@@ -64,7 +64,7 @@ pipeline {
                  container(name: 'docker') {
                     checkout([
                          $class: 'GitSCM', 
-                         branches: [[name: "${BRANCH}"]],
+                         branches: [[name: '${branch}']],
                          extensions: [], 
                          userRemoteConfigs: [[
                              credentialsId: "${GIT_CREDENTIAL_ID}",
