@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-    //   label "jenkins-slave"
+      label "jenkins-slave"
       cloud "kubernetes"
       namespace "default"
       slaveConnectTimeout 1200
