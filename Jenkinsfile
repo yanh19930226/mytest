@@ -76,6 +76,16 @@ pipeline {
         }
     }
 
+    stage('kubernetes') {
+
+        steps {
+            container(name: 'kubectl') {
+
+                 sh " kubectl get pod "
+            }
+        }
+    }
+
     stage('构建镜像') {
 
         steps {
