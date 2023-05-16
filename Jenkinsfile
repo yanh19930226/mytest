@@ -53,7 +53,7 @@ pipeline {
             when {
                 environment name:'deploymode', value:'deploy' 
             }           
-            // steps { 
+            steps { 
 
             //     checkout([$class: 'GitSCM', 
             //        branches: [[name: '${branch}']],
@@ -61,8 +61,9 @@ pipeline {
             //        userRemoteConfigs: [[credentialsId: 'jenkins',
             //        url: "${git_url}"]]]
             //       )
-            // }
-            checkout scmGit(branches: [[name: '${branch}']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/yanh19930226/mytest.git']])
+                checkout scmGit(branches: [[name: '${branch}']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/yanh19930226/mytest.git']])
+            }
+            
         }
 
         // stage('代码质量检测') {
