@@ -76,15 +76,7 @@ pipeline {
         }
     }
 
-    stage('kubernetes') {
-
-        steps {
-            container(name: 'kubectl') {
-
-                 sh " kubectl get pod "
-            }
-        }
-    }
+   
 
     stage('构建镜像') {
 
@@ -124,6 +116,19 @@ pipeline {
                
             }
         }
+    }
+
+     stage('kubernetes') {
+
+         steps {
+              withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                container(name: 'kubectl') {
+
+                   sh "kubectl get nodes --kubeconfig=/root/.kube/config"
+                   
+                }
+              }
+          }
     }
 
   }
