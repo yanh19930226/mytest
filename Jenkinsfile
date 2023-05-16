@@ -39,13 +39,14 @@ pipeline {
       choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
       //git参数
       gitParameter(
-            branch: '',
-            branchFilter: 'origin.*/(.*)',
-            defaultValue: 'main', // default value 必填
-            name: 'branch',
-            type: 'PT_BRANCH_TAG',
-            description: '选择git分支tage'
-            )
+         branch: '',
+         branchFilter: 'origin.*/(.*)',
+         defaultValue: 'main', // default value 必填
+         name: 'branch',
+         type: 'PT_BRANCH_TAG',
+         description: '选择git分支tage'
+      )
+
       string( name :'port',defaultValue:'',description:'服务port')
       string( name :'containerport',defaultValue:'',description:'容器port')
       choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
