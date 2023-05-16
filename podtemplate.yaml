@@ -7,7 +7,7 @@ spec:
   containers:
     #jnlp  
     - name: jnlp
-      image: jenkins/inbound-agent:4.7-1-jdk11
+      image: jenkins/inbound-agent
       args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
       imagePullPolicy: IfNotPresent
       volumeMounts:
