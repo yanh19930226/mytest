@@ -38,14 +38,14 @@ pipeline {
       //部署方式
       choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
       //git参数
-      gitParameter(
-         branch: '',
-         branchFilter: 'origin.*/(.*)',
-         defaultValue: 'main', // default value 必填
-         name: 'branch',
-         type: 'PT_BRANCH_TAG',
-         description: '选择git分支tage'
-      )
+    //   gitParameter(
+    //      branch: '',
+    //      branchFilter: 'origin.*/(.*)',
+    //      defaultValue: 'main', // default value 必填
+    //      name: 'branch',
+    //      type: 'PT_BRANCH_TAG',
+    //      description: '选择git分支tage'
+    //   )
 
       string( name :'port',defaultValue:'',description:'服务port')
       string( name :'containerport',defaultValue:'',description:'容器port')
@@ -63,7 +63,7 @@ pipeline {
 
                  container(name: 'docker') {
 
-                    checkout scmGit(branches: [[name: '${branch}']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git']])
+                    checkout scmGit(branches: [[name: 'test']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git']])
 
                     // checkout([
                     //      $class: 'GitSCM', 
