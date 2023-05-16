@@ -34,23 +34,23 @@ pipeline {
      buildDiscarder(logRotator(numToKeepStr: "10"))   //表示保留10次构建历史
   }
 
-//   parameters {
+  parameters {
       //部署方式
-    //   choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
+      choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
       //git参数
-    //   gitParameter(
-    //      branch: '',
-    //      branchFilter: 'origin.*/(.*)',
-    //      defaultValue: 'main', // default value 必填
-    //      name: 'branch',
-    //      type: 'PT_BRANCH_TAG',
-    //      description: '选择git分支tage'
-    //   )
+      gitParameter(
+         branch: '',
+         branchFilter: 'origin.*/(.*)',
+         defaultValue: 'main', // default value 必填
+         name: 'BRANCH',
+         type: 'PT_BRANCH_TAG',
+         description: '选择git分支tag'
+      )
 
-    //   string( name :'port',defaultValue:'',description:'服务port')
-    //   string( name :'containerport',defaultValue:'',description:'容器port')
-    //   choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
-//   }
+      string( name :'port',defaultValue:'',description:'服务port')
+      string( name :'containerport',defaultValue:'',description:'容器port')
+      choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
+  }
 
   stages {
 
@@ -63,20 +63,19 @@ pipeline {
 
                  container(name: 'docker') {
 
-                    git(url: "git@github.com:yanh19930226/mytest.git", branch: "main", changelog: true, credentialsId: "git")
+                    // git(url: "git@github.com:yanh19930226/mytest.git", branch: "main", changelog: true, credentialsId: "git")
                     // git branch: 'main', credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git'
-
                     // checkout scmGit(branches: [[name: 'test']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git']])
 
-                    // checkout([
-                    //      $class: 'GitSCM', 
-                    //      branches: [[name: '${branch}']],
-                    //      extensions: [], 
-                    //      userRemoteConfigs: [[
-                    //          credentialsId: "${GIT_CREDENTIAL_ID}",
-                    //          url: "${GIT_URL}"
-                    //      ]]
-                    // ])
+                    checkout([
+                         $class: 'GitSCM', 
+                         branches: [[name: "${BRANCH}"]],
+                         extensions: [], 
+                         userRemoteConfigs: [[
+                             credentialsId: "${GIT_CREDENTIAL_ID}",
+                             url: "${GIT_URL}"
+                         ]]
+                    ])
                  }
             }
         }
@@ -126,11 +125,6 @@ pipeline {
                 }
             }
         }
-        // stage('检查kubernetes环境') {
-        //   steps {
-             
-        //   }
-        // }
       }
     }
     // stage('部署容器到kubernetes') {
