@@ -47,9 +47,9 @@ pipeline {
     //      description: '选择git分支tage'
     //   )
 
-      string( name :'port',defaultValue:'',description:'服务port')
-      string( name :'containerport',defaultValue:'',description:'容器port')
-      choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
+    //   string( name :'port',defaultValue:'',description:'服务port')
+    //   string( name :'containerport',defaultValue:'',description:'容器port')
+    //   choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
   }
 
   stages {
