@@ -171,7 +171,7 @@ pipeline {
                     "### [${env.JOB_NAME}](${env.JOB_URL}) ",
                     '---',
                     "- 任务：[${currentBuild.displayName}](${env.BUILD_URL})",
-                    '- 状态：<font color=#FF8000 >中止</font>',
+                    '- 状态：<font color=#CCCCCC >中止</font>',
                     "- 持续时间：${currentBuild.durationString}",
                     "- 执行人：${currentBuild.buildCauses.shortDescription}",
                   ]
