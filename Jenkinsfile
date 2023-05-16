@@ -63,7 +63,10 @@ pipeline {
 
                  container(name: 'docker') {
 
-                    checkout scmGit(branches: [[name: 'test']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git']])
+
+                    git branch: 'main', credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git'
+
+                    // checkout scmGit(branches: [[name: 'test']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git']])
 
                     // checkout([
                     //      $class: 'GitSCM', 
