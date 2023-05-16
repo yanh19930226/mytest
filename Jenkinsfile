@@ -36,7 +36,7 @@ pipeline {
 
   parameters {
       //部署方式
-      choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
+    //   choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
       //git参数
     //   gitParameter(
     //      branch: '',
@@ -63,8 +63,8 @@ pipeline {
 
                  container(name: 'docker') {
 
-
-                    git branch: 'main', credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git'
+                    git(url: "git@github.com:yanh19930226/mytest.git", branch: "main", changelog: true, credentialsId: "git")
+                    // git branch: 'main', credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git'
 
                     // checkout scmGit(branches: [[name: 'test']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git']])
 
