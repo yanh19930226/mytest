@@ -55,6 +55,7 @@ pipeline {
   stages {
 
     stage ("Git拉取代码") {
+        
             //如果是部署模式重新拉取代码
             when {
                 environment name:'deploymode', value:'deploy' 
@@ -62,10 +63,6 @@ pipeline {
             steps { 
 
                  container(name: 'docker') {
-
-                    // git(url: "git@github.com:yanh19930226/mytest.git", branch: "main", changelog: true, credentialsId: "git")
-                    // git branch: 'main', credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git'
-                    // checkout scmGit(branches: [[name: 'test']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git']])
 
                     checkout([
                          $class: 'GitSCM', 
@@ -76,6 +73,7 @@ pipeline {
                              url: "${GIT_URL}"
                          ]]
                     ])
+
                  }
             }
         }

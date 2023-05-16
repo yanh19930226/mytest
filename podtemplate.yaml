@@ -49,6 +49,7 @@ spec:
     #net      
     - name: net
       image: registry.cn-hangzhou.aliyuncs.com/newbe36524/sdk:6.0.406
+      imagePullPolicy: IfNotPresent
       tty: true
       command:
         - "cat"
