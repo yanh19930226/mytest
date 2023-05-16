@@ -62,15 +62,18 @@ pipeline {
             steps { 
 
                  container(name: 'docker') {
-                    checkout([
-                         $class: 'GitSCM', 
-                         branches: [[name: '${branch}']],
-                         extensions: [], 
-                         userRemoteConfigs: [[
-                             credentialsId: "${GIT_CREDENTIAL_ID}",
-                             url: "${GIT_URL}"
-                         ]]
-                    ])
+
+                    checkout scmGit(branches: [[name: '${branch}']], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'git@github.com:yanh19930226/mytest.git']])
+
+                    // checkout([
+                    //      $class: 'GitSCM', 
+                    //      branches: [[name: '${branch}']],
+                    //      extensions: [], 
+                    //      userRemoteConfigs: [[
+                    //          credentialsId: "${GIT_CREDENTIAL_ID}",
+                    //          url: "${GIT_URL}"
+                    //      ]]
+                    // ])
                  }
             }
         }
