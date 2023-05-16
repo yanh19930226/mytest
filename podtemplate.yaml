@@ -60,74 +60,74 @@ spec:
           name: volume-time
           readOnly: false
     #node
-    - name: node
-      image: node:18.16.0
-      tty: true
-      command:
-        - "cat"
-      volumeMounts:
-        - mountPath: /etc/localtime
-          name: volume-time
+    # - name: node
+    #   image: node:18.16.0
+    #   tty: true
+    #   command:
+    #     - "cat"
+    #   volumeMounts:
+    #     - mountPath: /etc/localtime
+    #       name: volume-time
     #maven   
-    - name: maven
-      image: maven:3.6.3-openjdk-8
-      tty: true
-      command:
-        - "cat"
-      volumeMounts:
-        - mountPath: /etc/localtime
-          name: volume-time
-          readOnly: false
-        - mountPath: /root/.m2
-          name: volume-maven-repo
-          readOnly: false
-      env:
-        - name: "LANGUAGE"
-          value: "en_US:en"
-        - name: "LC_ALL"
-          value: "en_US.UTF-8"
-        - name: "LANG"
-          value: "en_US.UTF-8"
-    #golang
-    - name: golang
-      image: golang:1.20.4
-      imagePullPolicy: IfNotPresent
-      tty: true
-      command:
-        - "cat"
-      volumeMounts:
-        - mountPath: /etc/localtime
-          name: volume-time
-      env:
-        - name: "LANGUAGE"
-          value: "en_US:en"
-        - name: "LC_ALL"
-          value: "en_US.UTF-8"
-        - name: "LANG"
-          value: "en_US.UTF-8"
+    # - name: maven
+    #   image: maven:3.6.3-openjdk-8
+    #   tty: true
+    #   command:
+    #     - "cat"
+    #   volumeMounts:
+    #     - mountPath: /etc/localtime
+    #       name: volume-time
+    #       readOnly: false
+    #     - mountPath: /root/.m2
+    #       name: volume-maven-repo
+    #       readOnly: false
+    #   env:
+    #     - name: "LANGUAGE"
+    #       value: "en_US:en"
+    #     - name: "LC_ALL"
+    #       value: "en_US.UTF-8"
+    #     - name: "LANG"
+    #       value: "en_US.UTF-8"
+    # #golang
+    # - name: golang
+    #   image: golang:1.20.4
+    #   imagePullPolicy: IfNotPresent
+    #   tty: true
+    #   command:
+    #     - "cat"
+    #   volumeMounts:
+    #     - mountPath: /etc/localtime
+    #       name: volume-time
+    #   env:
+    #     - name: "LANGUAGE"
+    #       value: "en_US:en"
+    #     - name: "LC_ALL"
+    #       value: "en_US.UTF-8"
+    #     - name: "LANG"
+    #       value: "en_US.UTF-8"
     #sonarscanner
-    - name: sonarscanner
-      image: emeraldsquad/sonar-scanner:3.1
-      tty: true
-      command:
-        - "cat"
-      volumeMounts:
-        - mountPath: /etc/localtime
-          name: volume-time
-          readOnly: false
-        - mountPath: /root/.m2
-          name: volume-maven-repo
-          readOnly: false
-        - mountPath: /etc/hosts
-          name: volume-hosts
-          readOnly: false
-      env:
-        - name: "LANGUAGE"
-          value: "en_US:en"
-        - name: "LC_ALL"
-          value: "en_US.UTF-8"
-        - name: "LANG"
-          value: "en_US.UTF-8"
+    # - name: sonarscanner
+    #   image: emeraldsquad/sonar-scanner:3.1
+    #   tty: true
+    #   command:
+    #     - "cat"
+    #   volumeMounts:
+    #     - mountPath: /etc/localtime
+    #       name: volume-time
+    #       readOnly: false
+    #     - mountPath: /root/.m2
+    #       name: volume-maven-repo
+    #       readOnly: false
+    #     - mountPath: /etc/hosts
+    #       name: volume-hosts
+    #       readOnly: false
+    #   env:
+    #     - name: "LANGUAGE"
+    #       value: "en_US:en"
+    #     - name: "LC_ALL"
+    #       value: "en_US.UTF-8"
+    #     - name: "LANG"
+    #       value: "en_US.UTF-8"
   volumes:
     - name: volume-maven-repo
       nfs:
