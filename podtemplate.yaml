@@ -8,7 +8,7 @@ spec:
     #jnlp  
     - name: jnlp
       image: jenkins/inbound-agent
-      args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
+      # args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
       imagePullPolicy: IfNotPresent
       volumeMounts:
         - mountPath: /etc/localtime
