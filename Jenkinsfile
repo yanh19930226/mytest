@@ -1,7 +1,6 @@
 pipeline {
   agent {
     kubernetes {
-    //   namespace "default"
       yamlFile 'podtemplate.yaml'
       slaveConnectTimeout 1200
     }
