@@ -76,7 +76,7 @@ z62WK/DlAgpOAYl1nsXcV+YJchaX/5ITy1OOLXhzCJRgiHfI4l7uNhwdSyhXO1qT
 qbv/iWmwX9jvSGaiwQp8nSsZGVDQkYfwsbsC9AyabUS45ow6cEwnXWXNeC1atisz
 Sk/FGvavaS+r9cWUHnoyn8lMRuCGVIThsALpavsSQ1rEC3Jn1Ugn3HxcH0MRyHrQ
 xrE=
------END CERTIFICATE-----''', credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
+-----END CERTIFICATE-----''', credentialsId: 'k8s', serverUrl: 'https://yande.org:6443') {
     // some block
         sh 'kubectl get nodes'
         }
