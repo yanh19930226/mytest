@@ -62,7 +62,7 @@ pipeline {
 
                 container(name: 'kubectl') {
 
-                   sh "kubectl get nodes --kubeconfig=/etc/.kube/config"
+                   sh "kubectl get nodes --kubeconfig=/root/.kube/config"
 
                 }
 
