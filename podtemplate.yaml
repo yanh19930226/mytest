@@ -46,7 +46,7 @@ spec:
           name: volume-docker
           readOnly: false
         - mountPath: /root/.kube
-          name: kubeconfigbak
+          name: kubeconfig
           readOnly: false
     #net      
     - name: net
@@ -136,12 +136,12 @@ spec:
     - name: volume-time
       hostPath:
         path: /usr/share/zoneinfo/Asia/Shanghai
-    - name: kubeconfigbak
+    - name: kubeconfig
       secret:
-        secretName: kubeconfigbak
+        secretName: kubeconfig
         items:
-          - key: configbak
-            path: configbak
+          - key: config
+            path: config
     - name: volume-docker
       hostPath:
         path: /var/run/docker.sock
