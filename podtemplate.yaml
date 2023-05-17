@@ -17,8 +17,6 @@ spec:
           readOnly: false
         - mountPath: /var/run/docker.sock
           name: volume-docker
-        # - mountPath: /var/docker/docker.sock
-        #   name: volume-docker  
     #docker-git     
     - name: docker
       image: docker:20.10.21-git
@@ -142,15 +140,15 @@ spec:
     - name: volume-time
       hostPath:
         path: /usr/share/zoneinfo/Asia/Shanghai
-    # - name: kubeconfig
-    #   secret:
-    #     secretName: kubeconfig
-    #     items:
-    #       - key: config
-    #         path: config
     - name: kubeconfig
-      hostPath:
-        path: /root/.kube/config
+      secret:
+        secretName: kubeconfig
+        items:
+          - key: config
+            path: config
+    # - name: kubeconfig
+    #   hostPath:
+    #     path: /root/.kube/config
     - name: volume-docker
       hostPath:
         path: /var/run/docker.sock
