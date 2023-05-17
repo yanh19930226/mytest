@@ -1,11 +1,11 @@
 pipeline {
   agent {
     kubernetes {
-      cloud "kubernetes"
+    //   cloud "kubernetes"
       namespace "default"
       slaveConnectTimeout 1200
       yamlFile 'podtemplate.yaml'
-      label "jnlp"
+    //   label "jnlp"
     }
   }
   

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 spec:
   securityContext:
-    runAsUser: 1000 # default UID of jenkins user in agent image
+    runAsUser: 0 # default UID of jenkins user in agent image
   #nodeSelector  
   nodeSelector:
     agent: true
@@ -50,7 +50,7 @@ spec:
           name: volume-docker
           readOnly: false
         - mountPath: /etc/.kube
-          name: kubeconfig
+          name: volume-kubeconfig
           readOnly: false
     #net      
     - name: net
@@ -146,7 +146,7 @@ spec:
     #     items:
     #       - key: config
     #         path: config
-    - name: kubeconfig
+    - name: volume-kubeconfig
       hostPath:
         path: /root/.kube/config
     - name: volume-docker
