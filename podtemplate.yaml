@@ -48,6 +48,9 @@ spec:
         - mountPath: /root/.kube
           name: kubeconfig
           readOnly: false
+        - mountPath: /.kube
+          name: kubeconfig
+          readOnly: false  
     #net      
     - name: net
       image: registry.cn-hangzhou.aliyuncs.com/newbe36524/sdk:6.0.406
