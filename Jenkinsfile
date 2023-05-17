@@ -125,7 +125,31 @@ pipeline {
 
                    sh "kubectl get nodes --kubeconfig=/root/.kube/config"
 
-                }
+
+//                    kubeconfig(caCertificate: '''-----BEGIN CERTIFICATE-----
+// MIIC/jCCAeagAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl
+// cm5ldGVzMB4XDTIzMDUwMTA4NTExN1oXDTMzMDQyODA4NTExN1owFTETMBEGA1UE
+// AxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKz+
+// hRNLClyCgfiydGtBwicYV646DusoSSIG1kgv7Ao+wJ4JPpJX+A1cFkmeISOjsXgP
+// hsySMFW2w/m3gKS0Zrl0SEfUOAc8bkAaFuqj5oan4PaHNpWHpkadVJ3CxFgnjsPw
+// nHfcvOoDzLKdCxuMdmONwyV8FGItXWYWuPSdevwajGe2Gwnu7E73TKdiitY+TO7o
+// qgNm92TF3qnuDtRuOSoQfwDk0b7/tCiqmmsw8YdZ331vFAiWXFKpYRA5oKn0GXXV
+// e7Mwc8zy83w5z9+b/QRyo0CAXfmYIW+TO+9gXBzNzU9q7tIMQnFJFIB+1zLuvl23
+// 3tbCCynDBy3JIugdzMUCAwEAAaNZMFcwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB
+// /wQFMAMBAf8wHQYDVR0OBBYEFHK00rUXyMXJqAVqCTnKpfLUhdArMBUGA1UdEQQO
+// MAyCCmt1YmVybmV0ZXMwDQYJKoZIhvcNAQELBQADggEBAEJfNBjDCnT6+MQfCBzU
+// gjtby4rP9DWhQ7HoqEG6sitf3ZVkn0oIAoQKJs3bC8m7uSA+Aj00xc71D1+m81CX
+// Bikt+a8hKlCxDbxDe6Ye9cPQ1pUc2rCJIKS8FzbvXaAJ/AAwFu2HeK67Yy/rUWlV
+// z62WK/DlAgpOAYl1nsXcV+YJchaX/5ITy1OOLXhzCJRgiHfI4l7uNhwdSyhXO1qT
+// qbv/iWmwX9jvSGaiwQp8nSsZGVDQkYfwsbsC9AyabUS45ow6cEwnXWXNeC1atisz
+// Sk/FGvavaS+r9cWUHnoyn8lMRuCGVIThsALpavsSQ1rEC3Jn1Ugn3HxcH0MRyHrQ
+// xrE=
+// -----END CERTIFICATE-----''', credentialsId: 'hansl-token-7vqrc', serverUrl: 'https://139.198.171.190:6443') {
+
+
+//                    sh "kubectl get nodes --kubeconfig=/root/.kube/config"
+
+//                 }
               }
           }
     }
