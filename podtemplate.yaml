@@ -138,12 +138,15 @@ spec:
     - name: volume-time
       hostPath:
         path: /usr/share/zoneinfo/Asia/Shanghai
+    # - name: kubeconfig
+    #   secret:
+    #     secretName: kubeconfig
+    #     items:
+    #       - key: config
+    #         path: config
     - name: kubeconfig
-      secret:
-        secretName: kubeconfig
-        items:
-          - key: config
-            path: config
+      hostPath:
+        path: /root/.kube/config
     - name: volume-docker
       hostPath:
         path: /var/run/docker.sock
