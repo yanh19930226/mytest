@@ -121,35 +121,37 @@ pipeline {
     stage('kubernetes') {
          steps {
               withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-//                kubeconfig(caCertificate: '''-----BEGIN CERTIFICATE-----
-// MIICyDCCAbCgAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl
-// cm5ldGVzMB4XDTIxMDMyNTAwNTM0NVoXDTMxMDMyMzAwNTM0NVowFTETMBEGA1UE
-// AxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANnz
-// L2nv5wofXJCeVRVRUFNKkBLEQkBl65ZMpcBmVNiaFSgdJ05E9VWLc7jGQVRMrnmV
-// QR298eQtQStfnbSF4mH4keXAjLR9d0RrJ1yXsrMwpao5k9r+3h9RbtNwsmPnYKCO
-// 2bHy1dezC6BZgVyuR7F2CNSokklSA7x6ekmcqNvGjjq+XbDbepZyajnz9vRDDoIm
-// t+oLjSJ9S/VKyIOIXJEf1AkFjkGNPGIl6/GGPzlU8aO3bBQurzbxkO94quizwbjZ
-// SAGJSp8syp2Zsn58S732wN6S552U9wfF+aBV03LK+NiDD6nWT8hjqPE+QkOyIXcG
-// fstSkNMmz0vmLrWCP60CAwEAAaMjMCEwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB
-// /wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBACqOHgCn/7crvda1xHk2eoCqUWvK
-// Tj0ow0tF7+8UZWFmNXW/pHU0kK+rHr1kxPclOVe59+EUpVPPCtEIFMfEXnCXR1eJ
-// 7MggmIq9CbN9MeZ4Eh3YYUA2AXKP5fHulM7VNcFdzcLHqFi4xvLyUWo4yhzDsIbp
-// pICoUkELotBfFb9RTZim3YbHdSwEOC8Qoma4ilZf7Pc5X8qPhGpkgoF3DT+yeuB8
-// hHmOdCRTdJm9T39J6Y+I4ylJRoZZAcishmU2n1DBX6pMIL0U7AAErsi/JjmL10It
-// /DC+0cZw6udNbzhMyEaGndrmhlUgi2pDYf3P9mqwMgpxEfxuOvtoI80dSKM=
-// -----END CERTIFICATE-----''', credentialsId: 'hansl-token-7vqrc', serverUrl: 'https://10.0.254.101:8443') {
-//     // some block
-//         sh 'kubectl apply -f nginx.yaml'
-//         }
+               kubeconfig(caCertificate: '''-----BEGIN CERTIFICATE-----
+MIIC/jCCAeagAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl
+cm5ldGVzMB4XDTIzMDUwMTA4NTExN1oXDTMzMDQyODA4NTExN1owFTETMBEGA1UE
+AxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKz+
+hRNLClyCgfiydGtBwicYV646DusoSSIG1kgv7Ao+wJ4JPpJX+A1cFkmeISOjsXgP
+hsySMFW2w/m3gKS0Zrl0SEfUOAc8bkAaFuqj5oan4PaHNpWHpkadVJ3CxFgnjsPw
+nHfcvOoDzLKdCxuMdmONwyV8FGItXWYWuPSdevwajGe2Gwnu7E73TKdiitY+TO7o
+qgNm92TF3qnuDtRuOSoQfwDk0b7/tCiqmmsw8YdZ331vFAiWXFKpYRA5oKn0GXXV
+e7Mwc8zy83w5z9+b/QRyo0CAXfmYIW+TO+9gXBzNzU9q7tIMQnFJFIB+1zLuvl23
+3tbCCynDBy3JIugdzMUCAwEAAaNZMFcwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB
+/wQFMAMBAf8wHQYDVR0OBBYEFHK00rUXyMXJqAVqCTnKpfLUhdArMBUGA1UdEQQO
+MAyCCmt1YmVybmV0ZXMwDQYJKoZIhvcNAQELBQADggEBAEJfNBjDCnT6+MQfCBzU
+gjtby4rP9DWhQ7HoqEG6sitf3ZVkn0oIAoQKJs3bC8m7uSA+Aj00xc71D1+m81CX
+Bikt+a8hKlCxDbxDe6Ye9cPQ1pUc2rCJIKS8FzbvXaAJ/AAwFu2HeK67Yy/rUWlV
+z62WK/DlAgpOAYl1nsXcV+YJchaX/5ITy1OOLXhzCJRgiHfI4l7uNhwdSyhXO1qT
+qbv/iWmwX9jvSGaiwQp8nSsZGVDQkYfwsbsC9AyabUS45ow6cEwnXWXNeC1atisz
+Sk/FGvavaS+r9cWUHnoyn8lMRuCGVIThsALpavsSQ1rEC3Jn1Ugn3HxcH0MRyHrQ
+xrE=
+-----END CERTIFICATE-----''', credentialsId: 'k8s', serverUrl: 'https://139.198.171.190:6443') {
+    // some block
+        sh 'kubectl get nodes'
+        }
 
                 echo '=========begin kubectl==========='
-                
-                container(name: 'kubectl') {
+
+                // container(name: 'kubectl') {
                     
 
-                   sh "kubectl get nodes --kubeconfig=/root/.kube/config"
+                //    sh "kubectl get nodes --kubeconfig=/root/.kube/config"
 
-                }
+                // }
               }
           }
     }
