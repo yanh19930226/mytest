@@ -13,6 +13,8 @@ spec:
         - mountPath: /etc/localtime
           name: volume-time
           readOnly: false
+        - mountPath: /var/run/docker.sock
+          name: volume-docker
     #docker-git     
     - name: docker
       image: docker:20.10.21-git
