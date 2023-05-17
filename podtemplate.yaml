@@ -2,8 +2,9 @@ apiVersion: v1
 kind: Pod
 spec:
   securityContext:
-    privileged: true
-    runAsUser: 0 # default UID of jenkins user in agent image
+    runAsUser: 0
+    runAsGroup: 0
+    fsGroup: 0
   #nodeSelector  
   nodeSelector:
     agent: true
