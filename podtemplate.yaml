@@ -148,9 +148,6 @@ spec:
         items:
           - key: config
             path: config
-    # - name: volume-kubeconfig
-    #   hostPath:
-    #     path: /root/.kube/config
     - name: volume-docker
       hostPath:
         path: /var/run/docker.sock
