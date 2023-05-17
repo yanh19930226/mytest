@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: Pod
 spec:
+  securityContext:
+    runAsUser: 1000 # default UID of jenkins user in agent image
   #nodeSelector  
   nodeSelector:
     agent: true
@@ -15,6 +17,8 @@ spec:
           readOnly: false
         - mountPath: /var/run/docker.sock
           name: volume-docker
+        # - mountPath: /var/docker/docker.sock
+        #   name: volume-docker  
     #docker-git     
     - name: docker
       image: docker:20.10.21-git
