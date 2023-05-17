@@ -1,11 +1,11 @@
 pipeline {
   agent {
     kubernetes {
-      label "jnlp"
-      cloud "kubernetes"
+      cloud "${KUBERNETES_NAME}"
       namespace "default"
       slaveConnectTimeout 1200
       yamlFile 'podtemplate.yaml'
+      label "jnlp"
     }
   }
   
@@ -54,18 +54,19 @@ pipeline {
 
   stages {
 
-
       stage('kubernetes') {
          steps {
               withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
 
-                echo '=========begin kubectl==========='
+                echo '========= begin kubectl==========='
 
                 container(name: 'kubectl') {
 
-                   sh "kubectl get nodes --kubeconfig=/root/.kube/config"
+                   sh "kubectl get nodes --kubeconfig=/etc/.kube/config"
 
                 }
+
+                echo '=========end kubectl==========='
               }
           }
     }
@@ -132,8 +133,6 @@ pipeline {
             }
         }
     }
-
-  
 
   }
    post {
