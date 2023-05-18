@@ -145,6 +145,13 @@ pipeline {
 
                 container(name: 'kubectl') {
 
+                   sh """
+                      pwd
+
+                      ls
+
+                      """
+
                    sh "kubectl get nodes --kubeconfig=/root/.kube/config"
                     
                    sh "sed -i 's/NAMESPACE/${NAMESPACE}/' deploy.yaml"
