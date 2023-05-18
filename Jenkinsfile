@@ -14,13 +14,12 @@ pipeline {
       
       //harbor
       HARBOR_CREDENTIAL_ID="harbor"
-      HARBOR_URL="8.130.109.62"  
-      HARBOR_PROJECT_NAME = "${JOB_NAME}" 
+      REPOSITORY_URL="8.130.109.62"  
 
       //images
       PROJECT_NAME = "${JOB_NAME}"
       IMAGE_NAME="${PROJECT_NAME}:${BRANCH}"
-      TAG_IMAGE_NAME="${HARBOR_URL}/${HARBOR_PROJECT_NAME}/${PROJECT_NAME}:${BRANCH}"
+      IMAGE_URL="${REPOSITORY_URL}/${PROJECT_NAME}/${PROJECT_NAME}:${BRANCH}"
 
   }
 
@@ -32,8 +31,14 @@ pipeline {
   }
 
   parameters {
+
       //部署方式
-      choice (name: 'deploymode',choices: ['deploy', 'rollback'],description: '选择部署方式', )
+      choice (choices: ['deploy', 'rollback'],description: '部署方式', name: 'DEPLOYMODE',)
+
+      choice (choices: ['default','dev','test','prod'], description: '命名空间', name: 'NAMESPACE')
+
+      choice (choices: ['1', '3', '5', '7'], description: '副本数', name: 'REPLICASET')
+
       //git参数
       gitParameter(
          branch: '',
@@ -51,29 +56,22 @@ pipeline {
 
   stages {
 
-      stage('kubernetes') {
-         steps {
-              withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-
-                echo '========= begin kubectl==========='
-
-                container(name: 'kubectl') {
-
-                   sh "kubectl get nodes --kubeconfig=/root/.kube/config"
-
-                }
-
-                echo '=========end kubectl==========='
-              }
-          }
-    }
-
     stage ("Git拉取代码") {
 
         //如果是部署模式重新拉取代码
         when {
-            environment name:'deploymode', value:'deploy' 
+            environment name:'DEPLOYMODE', value:'deploy' 
         }
+
+        echo "${params.NAMESPACE}"
+        echo "${NAMESPACE}"
+        echo "${BRANCH}"
+
+        echo "================"
+
+        echo "${containerport}"
+        echo "${params.REPLICASET}"
+        echo "${params.BRANCH}"
 
         steps { 
              container(name: 'docker') {
@@ -93,12 +91,16 @@ pipeline {
 
     stage('构建镜像') {
 
+        when {
+            environment name:'DEPLOYMODE', value:'deploy'
+        }
+
         steps {
             container(name: 'docker') {
 
                  sh "docker build -t  ${IMAGE_NAME} ."
              
-                 sh "docker tag ${IMAGE_NAME} ${TAG_IMAGE_NAME}"
+                 sh "docker tag ${IMAGE_NAME} ${IMAGE_URL}"
 
             }
         }
@@ -107,7 +109,7 @@ pipeline {
     stage('发布镜像') {
 
         when {
-            environment name:'deploymode', value:'deploy'
+            environment name:'DEPLOYMODE', value:'deploy'
         }
 
         steps {
@@ -116,12 +118,15 @@ pipeline {
                 container(name: 'docker') {
                     echo "push image"
                 
-                    sh "docker login -u ${USERNAME}  -p ${PASSWORD} ${HARBOR_URL}"
+                    sh "docker login -u ${USERNAME}  -p ${PASSWORD} ${REPOSITORY_URL}"
                 
-                    sh "docker push ${TAG_IMAGE_NAME}"
+                    sh "docker push ${IMAGE_URL}"
+
                     echo "镜像上传成功"
+
                     sh "docker rmi -f ${IMAGE_NAME}"
-                    sh "docker rmi -f ${TAG_IMAGE_NAME}"
+
+                    sh "docker rmi -f ${IMAGE_URL}"
                     
                     echo "删除本地镜像成功"
                       
@@ -129,6 +134,75 @@ pipeline {
                
             }
         }
+    }
+
+    stage('镜像部署') {
+         
+         when {
+            environment name:'deploymode', value:'deploy'
+         }
+
+         steps {
+              withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+
+                echo '========= begin kubectl==========='
+
+                container(name: 'kubectl') {
+
+                   sh "kubectl get nodes --kubeconfig=/root/.kube/config"
+                    
+                   sh "sed -i 's/NAMESPACE/${NAMESPACE}/' deploy.yaml"
+
+                   sh "sed -i 's/REPLICASET/${REPLICASET}/' deploy.yaml"
+
+                   sh "sed -i 's/PROJECT_NAME/${PROJECT_NAME}/' deploy.yaml"
+
+                   sh "sed -i 's/REPOSITORY_URL/${REPOSITORY_URL}/' deploy.yaml"
+
+                   sh "sed -i 's/BRANCH/${BRANCH}/' deploy.yaml"
+
+                   sh "cat  deploy.yaml"
+
+                   sh "kubectl apply -f deploy.yml --namespace=${params.K8S_NAMESPACE}" 
+
+            //        sh """
+            //     pwd
+            //     ls
+            //     sed -i 's#IMAGE_NAME#${image_name}#' deploy.yaml
+            //     sed -i 's#SECRET_NAME#${secret_name}#' deploy.yaml
+            //     sed -i 's#RSCOUNT#${ReplicaCount}#' deploy.yaml
+            //     sed -i 's#NS#${Namespace}#' deploy.yaml
+            //     kubectl apply -f deploy.yaml -n ${Namespace} --kubeconfig=admin.kubeconfig
+            //     sleep 10
+            //     kubectl get pod -n ${Namespace} --kubeconfig=admin.kubeconfig
+            //   """
+
+                }
+
+                echo '=========end kubectl==========='
+              }
+          }
+    }
+
+    stage('版本回滚') {
+         
+         when {
+            environment name:'DEPLOYMODE', value:'deploy'
+         }
+
+         steps {
+              withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+
+                echo '========= begin kubectl==========='
+
+                container(name: 'kubectl') {
+
+
+                }
+
+                echo '=========end kubectl==========='
+              }
+          }
     }
 
   }

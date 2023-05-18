@@ -1,53 +1,54 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <APP_NAME>
-  namespace: <NAMESPACE>
+  name: PROJECT_NAME
+  namespace: NAMESPACE
   labels:
-    app: <APP_NAME>
+    app: PROJECT_NAME
 spec:
-  replicas: 2
+  replicas: REPLICASET
   selector:
     matchLabels:
-      app: <APP_NAME>
+      app: PROJECT_NAME
   template:
     metadata:
       labels:
-        app: <APP_NAME>
+        app: PROJECT_NAME
     spec:
       containers:
-        - image: 39.101.1.156:89/<APP_NAME>/<APP_NAME>:<APP_TAG>
+        - image: REPOSITORY_URL/PROJECT_NAME/PROJECT_NAME:BRANCH
           imagePullPolicy: Always
-          name: <APP_NAME>
+          name: PROJECT_NAME
           ports:
             - containerPort: 80
       imagePullSecrets:
       - name: harbor
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   annotations: {}
   labels:
-    app: <APP_NAME>
-  name: <APP_NAME>
-  namespace: <NAMESPACE>
+    app: PROJECT_NAME
+  name: PROJECT_NAME
+  namespace: NAMESPACE
 spec:
   selector:
-    app: <APP_NAME>
+    app: PROJECT_NAME
   ports:
   - port: 8080
     targetPort: 80
   type: NodePort
+
 ---   
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata: 
-  name: pipeline
-  namespace: test
+  name: PROJECT_NAME
+  namespace: NAMESPACE
 spec:
-  ingressClassName: pipeline
+  ingressClassName: PROJECT_NAME
   rules:
   - host: "pipeline.com"
     http:
@@ -56,7 +57,7 @@ spec:
         path: "/"
         backend:
           service:
-            name: pipeline
+            name: PROJECT_NAME
             port:
               number: 8080
  
