@@ -49,9 +49,9 @@ pipeline {
          description: '选择git分支tag'
       )
 
-      string( name :'port',defaultValue:'',description:'服务port')
-      string( name :'containerport',defaultValue:'',description:'容器port')
-      choice(name: 'sonarqube', choices: ['false','true'],description: '是否进行代码质量检测')  
+      string( name :'PORT',defaultValue:'',description:'服务port')
+      string( name :'CONTAINERPORT',defaultValue:'',description:'容器port')
+      choice(name: 'SONARQUBE', choices: ['false','true'],description: '是否进行代码质量检测')  
   }
 
   stages {
@@ -66,21 +66,6 @@ pipeline {
        
         steps { 
              container(name: 'docker') {
-
-
-
-                 echo "${params.NAMESPACE}"
-        echo "${NAMESPACE}"
-        echo "${BRANCH}"
-
-        echo "================"
-
-        echo "${containerport}"
-        echo "${params.REPLICASET}"
-        echo "${params.BRANCH}"
-
-
-
                 checkout([
                      $class: 'GitSCM', 
                      branches: [[name: "${BRANCH}"]],
@@ -145,7 +130,7 @@ pipeline {
     stage('镜像部署') {
          
          when {
-            environment name:'deploymode', value:'deploy'
+            environment name:'DEPLOYMODE', value:'deploy'
          }
 
          steps {
@@ -167,21 +152,13 @@ pipeline {
 
                    sh "sed -i 's/BRANCH/${BRANCH}/' deploy.yaml"
 
+                   sh "sed -i 's/CONTAINERPORT/${CONTAINERPORT}/' deploy.yaml"
+
+                   sh "sed -i 's/PORT/${PORT}/' deploy.yaml"
+
                    sh "cat  deploy.yaml"
 
-                   sh "kubectl apply -f deploy.yml --namespace=${params.K8S_NAMESPACE}" 
-
-            //        sh """
-            //     pwd
-            //     ls
-            //     sed -i 's#IMAGE_NAME#${image_name}#' deploy.yaml
-            //     sed -i 's#SECRET_NAME#${secret_name}#' deploy.yaml
-            //     sed -i 's#RSCOUNT#${ReplicaCount}#' deploy.yaml
-            //     sed -i 's#NS#${Namespace}#' deploy.yaml
-            //     kubectl apply -f deploy.yaml -n ${Namespace} --kubeconfig=admin.kubeconfig
-            //     sleep 10
-            //     kubectl get pod -n ${Namespace} --kubeconfig=admin.kubeconfig
-            //   """
+                //    sh "kubectl apply -f deploy.yml --namespace=${NAMESPACE}" 
 
                 }
 
@@ -193,20 +170,20 @@ pipeline {
     stage('版本回滚') {
          
          when {
-            environment name:'DEPLOYMODE', value:'deploy'
+            environment name:'DEPLOYMODE', value:'rollback'
          }
 
          steps {
               withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
 
-                echo '========= begin kubectl==========='
+                echo '========= begin rollback==========='
 
                 container(name: 'kubectl') {
 
 
                 }
 
-                echo '=========end kubectl==========='
+                echo '=========end rollback==========='
               }
           }
     }

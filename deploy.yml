@@ -20,7 +20,7 @@ spec:
           imagePullPolicy: Always
           name: PROJECT_NAME
           ports:
-            - containerPort: 80
+            - containerPort: CONTAINERPORT
       imagePullSecrets:
       - name: harbor
 
@@ -37,8 +37,8 @@ spec:
   selector:
     app: PROJECT_NAME
   ports:
-  - port: 8080
-    targetPort: 80
+  - port: PORT
+    targetPort: CONTAINERPORT
   type: NodePort
 
 ---   
@@ -59,7 +59,7 @@ spec:
           service:
             name: PROJECT_NAME
             port:
-              number: 8080
+              number: PORT
  
 
     
