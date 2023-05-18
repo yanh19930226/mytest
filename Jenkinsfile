@@ -63,7 +63,13 @@ pipeline {
             environment name:'DEPLOYMODE', value:'deploy' 
         }
 
-        echo "${params.NAMESPACE}"
+       
+        steps { 
+             container(name: 'docker') {
+
+
+
+                 echo "${params.NAMESPACE}"
         echo "${NAMESPACE}"
         echo "${BRANCH}"
 
@@ -73,8 +79,8 @@ pipeline {
         echo "${params.REPLICASET}"
         echo "${params.BRANCH}"
 
-        steps { 
-             container(name: 'docker') {
+
+
                 checkout([
                      $class: 'GitSCM', 
                      branches: [[name: "${BRANCH}"]],
