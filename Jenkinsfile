@@ -167,7 +167,7 @@ pipeline {
 
                       sed -i 's/PORT/${PORT}/g' k8sdeploy.yaml
 
-                      cat  deploy.yaml
+                      cat  k8sdeploy.yaml
 
                       """   
 
