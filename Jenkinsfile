@@ -153,19 +153,19 @@ pipeline {
 
                       kubectl get nodes --kubeconfig=/root/.kube/config
 
-                      sed -i 's/NAMESPACE/${NAMESPACE}/g' deploy.yaml
+                      sed -i 's/NAMESPACE/${NAMESPACE}/g' k8sdeploy.yaml
 
-                      sed -i 's/REPLICASET/${REPLICASET}/g' deploy.yaml
+                      sed -i 's/REPLICASET/${REPLICASET}/g' k8sdeploy.yaml
 
-                      sed -i 's/PROJECT_NAME/${PROJECT_NAME}/g' deploy.yaml
+                      sed -i 's/PROJECT_NAME/${PROJECT_NAME}/g' k8sdeploy.yaml
 
-                      sed -i 's/REPOSITORY_URL/${REPOSITORY_URL}/g' deploy.yaml
+                      sed -i 's/REPOSITORY_URL/${REPOSITORY_URL}/g' k8sdeploy.yaml
 
                       sed -i 's/BRANCH/${BRANCH}/g' deploy.yaml
 
-                      sed -i 's/CONTAINERPORT/${CONTAINERPORT}/g' deploy.yaml
+                      sed -i 's/CONTAINERPORT/${CONTAINERPORT}/g' k8sdeploy.yaml
 
-                      sed -i 's/PORT/${PORT}/g' deploy.yaml
+                      sed -i 's/PORT/${PORT}/g' k8sdeploy.yaml
 
                       cat  deploy.yaml
 
