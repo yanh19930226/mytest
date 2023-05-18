@@ -56,7 +56,7 @@ pipeline {
 
   stages {
 
-    stage ("Git拉取代码") {
+    stage ("代码拉取") {
 
         //如果是部署模式重新拉取代码
         when {
@@ -80,7 +80,7 @@ pipeline {
     }
 
 
-    stage('构建镜像') {
+    stage('镜像构建') {
 
         when {
             environment name:'DEPLOYMODE', value:'deploy'
@@ -97,7 +97,7 @@ pipeline {
         }
     }
 
-    stage('发布镜像') {
+    stage('镜像发布') {
 
         when {
             environment name:'DEPLOYMODE', value:'deploy'
@@ -127,10 +127,15 @@ pipeline {
         }
     }
 
-    stage('镜像部署') {
+    stage('部署镜像') {
          
          when {
             environment name:'DEPLOYMODE', value:'deploy'
+         }
+
+         input {
+                message "是否部署镜像"
+                ok "ok"
          }
 
          steps {
@@ -172,6 +177,12 @@ pipeline {
          when {
             environment name:'DEPLOYMODE', value:'rollback'
          }
+
+         input {
+                message "是否进行回滚"
+                ok "ok"
+         }
+
 
          steps {
               withCredentials([usernamePassword(credentialsId: "${HARBOR_CREDENTIAL_ID}", passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
