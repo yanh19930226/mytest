@@ -146,29 +146,48 @@ pipeline {
                 container(name: 'kubectl') {
 
                    sh """
+
                       pwd
 
                       ls
 
-                      """
+                      kubectl get nodes --kubeconfig=/root/.kube/config
 
-                   sh "kubectl get nodes --kubeconfig=/root/.kube/config"
+                      sed -i 's/NAMESPACE/${NAMESPACE}/g' deploy.yaml
+
+                      sed -i 's/REPLICASET/${REPLICASET}/g' deploy.yaml
+
+                      sed -i 's/PROJECT_NAME/${PROJECT_NAME}/g' deploy.yaml
+
+                      sed -i 's/REPOSITORY_URL/${REPOSITORY_URL}/g' deploy.yaml
+
+                      sed -i 's/BRANCH/${BRANCH}/g' deploy.yaml
+
+                      sed -i 's/CONTAINERPORT/${CONTAINERPORT}/g' deploy.yaml
+
+                      sed -i 's/PORT/${PORT}/g' deploy.yaml
+
+                      cat  deploy.yaml
+
+                      """   
+
+                //    sh "kubectl get nodes --kubeconfig=/root/.kube/config"
                     
-                   sh "sed -i 's/NAMESPACE/${NAMESPACE}/' deploy.yaml"
+                //    sh "sed -i 's/NAMESPACE#${NAMESPACE}/g' deploy.yaml"
 
-                   sh "sed -i 's/REPLICASET/${REPLICASET}/' deploy.yaml"
+                //    sh "sed -i 's/REPLICASET/${REPLICASET}/g' deploy.yaml"
 
-                   sh "sed -i 's/PROJECT_NAME/${PROJECT_NAME}/' deploy.yaml"
+                //    sh "sed -i 's/PROJECT_NAME/${PROJECT_NAME}/g' deploy.yaml"
 
-                   sh "sed -i 's/REPOSITORY_URL/${REPOSITORY_URL}/' deploy.yaml"
+                //    sh "sed -i 's/REPOSITORY_URL/${REPOSITORY_URL}/g' deploy.yaml"
 
-                   sh "sed -i 's/BRANCH/${BRANCH}/' deploy.yaml"
+                //    sh "sed -i 's/BRANCH/${BRANCH}/g' deploy.yaml"
 
-                   sh "sed -i 's/CONTAINERPORT/${CONTAINERPORT}/' deploy.yaml"
+                //    sh "sed -i 's/CONTAINERPORT/${CONTAINERPORT}/g' deploy.yaml"
 
-                   sh "sed -i 's/PORT/${PORT}/' deploy.yaml"
+                //    sh "sed -i 's/PORT/${PORT}/g' deploy.yaml"
 
-                   sh "cat  deploy.yaml"
+                //    sh "cat  deploy.yaml"
 
                 //    sh "kubectl apply -f deploy.yml --namespace=${NAMESPACE}" 
 
